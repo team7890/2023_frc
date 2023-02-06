@@ -3,3 +3,8 @@ https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-late
 
 Rev
 https://software-metadata.revrobotics.com/REVLib-2023.json
+
+Team 364 : BaseFalconSwerve
+https://github.com/Team364/BaseFalconSwerve
+        Added CAN network to CANCoders and Falcons in SwerveModule.java lines: 32-44
+        Added CAN network to Pigeon2 gyro in Swerve.java lines : 27

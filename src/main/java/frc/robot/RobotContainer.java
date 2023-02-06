@@ -22,6 +22,19 @@ import frc.robot.commands.Forearm_command;
 import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.commands.Wrist_command;
 
+//Begginning of Swerve Imports
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+//Already Imported: import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.autos.*;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+//End of Swerve Imports
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -39,8 +52,36 @@ public class RobotContainer {
   private final CommandXboxController m_driverController =
       new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
+  //For Swerve
+  /* Controllers */
+  private final Joystick driver = new Joystick(Constants.OperatorConstants.iDriverStick);
+
+  /* Drive Controls */
+  private final int translationAxis = XboxController.Axis.kLeftY.value;
+  private final int strafeAxis = XboxController.Axis.kLeftX.value;
+  private final int rotationAxis = XboxController.Axis.kRightX.value;
+
+  /* Driver Buttons */
+  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
+  /* Subsystems */
+  private final Swerve s_Swerve = new Swerve();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    //Swerve Stuff
+    
+    s_Swerve.setDefaultCommand(
+      new TeleopSwerve(
+        s_Swerve, 
+        () -> -driver.getRawAxis(translationAxis), 
+        () -> -driver.getRawAxis(strafeAxis), 
+        () -> -driver.getRawAxis(rotationAxis), 
+        () -> robotCentric.getAsBoolean()
+      )
+    );
+    
     // Configure the trigger bindings
     configureBindings();
   }
@@ -70,6 +111,8 @@ public class RobotContainer {
     m_driverController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeed));
     m_driverController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeed));
 
+    /* Driver Buttons */    //For Swerve
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
 
   /**
@@ -77,9 +120,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   ; 
-  //   // An example command will be run in autonomous
-  //   // return Autos.exampleAuto(m_exampleSubsystem);
-  // }
+  public Command getAutonomousCommand() {
+    //   // An example command will be run in autonomous
+    //   // return Autos.exampleAuto(m_exampleSubsystem);
+  
+    // An ExampleCommand will run in autonomous
+    return new exampleAuto(s_Swerve);
+  }
+
+  
 }
