@@ -48,17 +48,17 @@ public class RobotContainer {
 
   //For Swerve
   /* Controllers */
-  private final Joystick m_DriverController = new Joystick(Constants.Controllers.iDriver);
-  //  private final CommandXboxController m_DriverController = new CommandXboxController(Constants.Controllers.iDriver);    //Amalan How do we do this with CommandXboxController?
+  // private final Joystick m_DriverController = new Joystick(Constants.Controllers.iDriver);            //This is a change from team:364 code because we used CommandXboxController
+  private final CommandXboxController m_DriverController = new CommandXboxController(Constants.Controllers.iDriver);    //Amalan How do we do this with CommandXboxController?
 
   /* Drive Controls */
-  private final int translationAxis = XboxController.Axis.kLeftY.value;
-  private final int strafeAxis = XboxController.Axis.kLeftX.value;
-  private final int rotationAxis = XboxController.Axis.kRightX.value;
+  // private final int translationAxis = XboxController.Axis.kLeftY.value;            //This is a change from team:364 code because we used CommandXboxController
+  // private final int strafeAxis = XboxController.Axis.kLeftX.value;            //This is a change from team:364 code because we used CommandXboxController
+  // private final int rotationAxis = XboxController.Axis.kRightX.value;            //This is a change from team:364 code because we used CommandXboxController
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(m_DriverController, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(m_DriverController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton zeroGyro = new JoystickButton(m_DriverController, XboxController.Button.kY.value);            //This is a change from team:364 code because we used CommandXboxController
+  // private final JoystickButton robotCentric = new JoystickButton(m_DriverController, XboxController.Button.kLeftBumper.value);            //This is a change from team:364 code because we used CommandXboxController
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -67,10 +67,11 @@ public class RobotContainer {
   public RobotContainer() {
     //Swerve Stuff
     
+          //This is a change from team:364 code because we used CommandXboxController
     // s_Swerve.setDefaultCommand(              //Amalan How do we do this with CommandXboxController?
     //   new TeleopSwerve(
     //     s_Swerve, 
-    //     () -> -m_DriverController.getRawAxis(translationAxis), 
+        // () -> -m_DriverController.getRawAxis(translationAxis), 
     //     () -> -m_DriverController.getRawAxis(strafeAxis), 
     //     () -> -m_DriverController.getRawAxis(rotationAxis), 
     //     () -> robotCentric.getAsBoolean()
@@ -80,10 +81,10 @@ public class RobotContainer {
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
         s_Swerve, 
-        () -> -m_DriverController.getRawAxis(translationAxis), 
-        () -> -m_DriverController.getRawAxis(strafeAxis), 
-        () -> -m_DriverController.getRawAxis(rotationAxis), 
-        () -> robotCentric.getAsBoolean()
+        () -> -m_DriverController.getLeftY(), 
+        () -> -m_DriverController.getLeftX(),
+        () -> -m_DriverController.getRightX(),
+        () -> m_DriverController.leftBumper().getAsBoolean()
       )
     );
 
@@ -119,10 +120,8 @@ public class RobotContainer {
     m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeed));
 
     /* Driver Buttons */    //For Swerve
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    // m_DriverController.y().onTrue(new )                                  //Amalan How do we do this with CommandXboxController?
-
-    //m_DriverController.
+    // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
+    m_DriverController.y().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
 
   }
 
