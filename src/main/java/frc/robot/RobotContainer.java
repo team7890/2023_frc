@@ -12,16 +12,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 //Arm Imports
 import frc.robot.subsystems.Arm_subsystem;
-import frc.robot.commands.Arm_command;
-
 //ForeArm Imports
 import frc.robot.subsystems.Forearm_subsystem;
-import frc.robot.commands.Forearm_command;
-
 //Wrist Imports
 import frc.robot.subsystems.Wrist_subsystem;
-import frc.robot.commands.Wrist_command;
-
 //Begginning of Swerve Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -49,12 +43,13 @@ public class RobotContainer {
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_CoPilotController =
+      new CommandXboxController(Constants.Controllers.iCoPilot);
 
   //For Swerve
   /* Controllers */
-  private final Joystick driver = new Joystick(Constants.OperatorConstants.iDriverStick);
+  private final Joystick m_DriverController = new Joystick(Constants.Controllers.iDriver);
+  //  private final CommandXboxController m_DriverController = new CommandXboxController(Constants.Controllers.iDriver);    //Amalan How do we do this with CommandXboxController?
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -62,8 +57,8 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton zeroGyro = new JoystickButton(m_DriverController, XboxController.Button.kY.value);
+  private final JoystickButton robotCentric = new JoystickButton(m_DriverController, XboxController.Button.kLeftBumper.value);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -72,15 +67,27 @@ public class RobotContainer {
   public RobotContainer() {
     //Swerve Stuff
     
+    // s_Swerve.setDefaultCommand(              //Amalan How do we do this with CommandXboxController?
+    //   new TeleopSwerve(
+    //     s_Swerve, 
+    //     () -> -m_DriverController.getRawAxis(translationAxis), 
+    //     () -> -m_DriverController.getRawAxis(strafeAxis), 
+    //     () -> -m_DriverController.getRawAxis(rotationAxis), 
+    //     () -> robotCentric.getAsBoolean()
+    //   )
+    // );
+
     s_Swerve.setDefaultCommand(
       new TeleopSwerve(
         s_Swerve, 
-        () -> -driver.getRawAxis(translationAxis), 
-        () -> -driver.getRawAxis(strafeAxis), 
-        () -> -driver.getRawAxis(rotationAxis), 
+        () -> -m_DriverController.getRawAxis(translationAxis), 
+        () -> -m_DriverController.getRawAxis(strafeAxis), 
+        () -> -m_DriverController.getRawAxis(rotationAxis), 
         () -> robotCentric.getAsBoolean()
       )
     );
+
+
     
     // Configure the trigger bindings
     configureBindings();
@@ -102,17 +109,21 @@ public class RobotContainer {
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_driverController.x().whileTrue(new Arm_command(objArm_subsystem, Constants.Arm.dArmSpeed));
-    m_driverController.y().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeed));
+    m_CoPilotController.x().whileTrue(new Arm_command(objArm_subsystem, Constants.Arm.dArmSpeed));
+    m_CoPilotController.y().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeed));
 
-    m_driverController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dForearmSpeed));
-    m_driverController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeed));
+    m_CoPilotController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dForearmSpeed));
+    m_CoPilotController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeed));
 
-    m_driverController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeed));
-    m_driverController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeed));
+    m_CoPilotController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeed));
+    m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeed));
 
     /* Driver Buttons */    //For Swerve
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    // m_DriverController.y().onTrue(new )                                  //Amalan How do we do this with CommandXboxController?
+
+    //m_DriverController.
+
   }
 
   /**

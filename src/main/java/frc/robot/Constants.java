@@ -32,10 +32,9 @@ public final class Constants {
     public static final int iForearmMotor = 13;
     public static final int iWristMotor = 10;
   }
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 1;
-    public static final int iDriverStick = 0;
+  public static class Controllers {
+    public static final int iCoPilot = 1;
+    public static final int iDriver = 0;
   }
 
   public static final class Arm{
