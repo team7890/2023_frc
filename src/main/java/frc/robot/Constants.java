@@ -72,8 +72,8 @@ public final class Constants {
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(20.75); //Done: This must be tuned to specific robot
-        public static final double wheelBase = Units.inchesToMeters(20.75); //Done: This must be tuned to specific robot
+        public static final double trackWidth = Units.inchesToMeters(20.75); //TODO: This must be tuned to specific robot
+        public static final double wheelBase = Units.inchesToMeters(20.75); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -97,12 +97,12 @@ public final class Constants {
 
         /* Swerve Current Limiting */
         public static final int angleContinuousCurrentLimit = 25;
-        public static final int anglePeakCurrentLimit = 40;
+        public static final int anglePeakCurrentLimit = 30;                 // Changed from Team:364 default of 40
         public static final double anglePeakCurrentDuration = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
         public static final int driveContinuousCurrentLimit = 35;
-        public static final int drivePeakCurrentLimit = 60;
+        public static final int drivePeakCurrentLimit = 40;                 // Changed from Team:364 default of 60
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -141,7 +141,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 { //DONE: This must be tuned to specific robot
+        public static final class Mod0 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 23;
             public static final int angleMotorID = 22;
             public static final int canCoderID = 21;
@@ -151,7 +151,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 { //DONE: This must be tuned to specific robot
+        public static final class Mod1 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 26;
             public static final int angleMotorID = 25;
             public static final int canCoderID = 24;
@@ -161,7 +161,7 @@ public final class Constants {
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { //DONE: This must be tuned to specific robot
+        public static final class Mod2 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 33;
             public static final int angleMotorID = 32;
             public static final int canCoderID = 31;
@@ -171,7 +171,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 { //DONE: This must be tuned to specific robot
+        public static final class Mod3 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 36;
             public static final int angleMotorID = 35;
             public static final int canCoderID = 34;
