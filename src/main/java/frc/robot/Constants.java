@@ -61,6 +61,38 @@ public final class Constants {
     public static final double dOffset = 13.5;                         // Need to set this
   }
 
+
+
+
+  
+  //AUTO STUFF
+//Autonomous testingPath (PathPlanner)
+public static final String testingPath = "output/TestingPath.wpilib.json";
+
+//Pathfinder Constant Class
+public static final class PathPlannerConstants {
+
+  // Autonomous Period Constants
+  public static final double autoMaxVelocity = 4.5; // meters/second
+  public static final double autoMaxAcceleration = 3.25; // meters/second/second
+  public static final double kPXController = 1.25;
+  public static final double kPYController = 1.25;
+  public static final double kPThetaController = 3;
+  public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+  public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+  // Constraint for the motion profiled robot angle controller
+  public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+    new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+  // Test Auto File Paths
+  public static final String firstTestPath = "testPath1";
+  public static final String secondTestPath = "my path";
+}
+
+
+
+
   //Beginning of Stuff Copied in for Swerve
   public static final double stickDeadband = 0.1;
 
