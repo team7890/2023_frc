@@ -39,7 +39,7 @@ public final class Constants {
 
   public static final class Arm {
     public static final int iCurrentLimit = 40;
-    public static final double dArmSpeed = 0.3;
+    public static final double dArmSpeed = 0.2;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
     public static final double dOffset = -72.5;                         // Need to set this

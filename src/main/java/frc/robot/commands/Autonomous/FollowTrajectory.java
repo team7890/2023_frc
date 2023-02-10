@@ -45,29 +45,29 @@ public class FollowTrajectory extends CommandBase {
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    new SwerveControllerCommand(
-        trajectory,
-        drive::getPose, // Functional interface to feed supplier
-        Constants.Swerve.swerveKinematics,
+    // new SwerveControllerCommand(       //TODO: Fix Errors
+    //     trajectory,
+    //     drive::getPose, // Functional interface to feed supplier
+    //     Constants.Swerve.swerveKinematics,
 
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        drive::setModuleStates,
-        drive).andThen(() -> drive.drive(0, 0, 0, false)).schedule(); // Stops the robot
+    //     // Position controllers
+    //     new PIDController(AutoConstants.kPXController, 0, 0),
+    //     new PIDController(AutoConstants.kPYController, 0, 0),
+    //     thetaController,
+    //     drive::setModuleStates,
+    //     drive).andThen(() -> drive.drive(0, 0, 0, false)).schedule(); // Stops the robot //TODO: fix errors
 
-        // Reset odometry to the starting pose of the trajectory.
-        // drive.resetOdometry(trajectory.getInitialPose());
+    //     // Reset odometry to the starting pose of the trajectory.
+    //     // drive.resetOdometry(trajectory.getInitialPose());
   }
 
   @Override
   public void execute() {}
 
-  @Override
-  public void end(boolean interrupted) {
-    drive.drive(0, 0, 0, false);
-  }
+  // @Override      //TODO: Fix Errors
+  // public void end(boolean interrupted) {
+  //   drive.drive(0, 0, 0, false);
+  // }
 
   @Override
   public boolean isFinished() {
