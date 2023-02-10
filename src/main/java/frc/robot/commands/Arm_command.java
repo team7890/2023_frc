@@ -34,10 +34,10 @@ public class Arm_command extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // objArm_subsystem.moveArm(dSpeed);
-    if(bMode) objArm_subsystem.moveArmToAngle(88.0, dAngle_old);
-    else objArm_subsystem.moveArm(dSpeed);
-    dAngle_old = objArm_subsystem.getArmAngle();
+    objArm_subsystem.moveArm(dSpeed);
+    // if(bMode) objArm_subsystem.moveArmToAngle(88.0, dAngle_old);
+    // else objArm_subsystem.moveArm(dSpeed);
+    // dAngle_old = objArm_subsystem.getArmAngle();
   }
 
   // Called once the command ends or is interrupted.
