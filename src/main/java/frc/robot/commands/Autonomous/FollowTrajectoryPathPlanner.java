@@ -8,13 +8,13 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.Trajectory;
+// import edu.wpi.first.math.controller.ProfiledPIDController;      // Unused
+// import edu.wpi.first.math.trajectory.Trajectory;                 // Unused
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;                                     // Changed to Constants.java
+// import edu.wpi.first.wpilibj2.command.Subsystem;                 // Unused
+import frc.robot.Constants;                                         // Changed to Constants.java
 import frc.robot.Constants.PathPlannerConstants;
-import frc.robot.subsystems.Swerve;                             // Changed to our Swerve subsystem
+import frc.robot.subsystems.Swerve;                                 // Changed to our Swerve subsystem
 
 public class FollowTrajectoryPathPlanner extends CommandBase {
 
@@ -70,14 +70,23 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
         // followTrajectoryPathPlannerCommand = new PPSwerveControllerCommand(trajectoryToFollow, swerveSubsystem::getPose, xController, yController, yController, swerveSubsystem::setModuleStates, swerveSubsystem);
         
         followTrajectoryPathPlannerCommand.schedule();
-        
-
 
     }
 
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        done = followTrajectoryPathPlannerCommand.isFinished();
+    }
 
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
 
-
-
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return done;
+    }
 
 }
