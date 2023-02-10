@@ -15,12 +15,12 @@ public class Utilities {
         dAngle = dAngle - dOffset_in;       //makes the percents aligned with the table horizontally
         dAngle = dAngle % 360;
         if((dAngle % 360) < 0) {
-        dAngle = dAngle + 360;
+        dAngle = dAngle + 360.0;
         }
 
         SmartDashboard.putNumber("Angle", dAngle);
                                         
-        return dAngle;
+        return dAngle - 180.0;
     }
 
 

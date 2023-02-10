@@ -12,11 +12,14 @@ public class Arm_command extends CommandBase {
 
   private final double dSpeed;
   private final Arm_subsystem objArm_subsystem;
+  private final boolean bMode;
+  private double dAngle_old;
 
   /** Creates a new Arm_command. */
-  public Arm_command(Arm_subsystem objArm_subsystem_in, double dSpeed_in) {
+  public Arm_command(Arm_subsystem objArm_subsystem_in, double dSpeed_in, boolean bMode_in) {
     objArm_subsystem = objArm_subsystem_in;
     dSpeed = dSpeed_in;
+    bMode = bMode_in;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(objArm_subsystem);
   }
@@ -25,12 +28,16 @@ public class Arm_command extends CommandBase {
   @Override
   public void initialize() {
     objArm_subsystem.stopArm();
+    dAngle_old = objArm_subsystem.getArmAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    objArm_subsystem.moveArm(dSpeed);
+    // objArm_subsystem.moveArm(dSpeed);
+    if(bMode) objArm_subsystem.moveArmToAngle(88.0, dAngle_old);
+    else objArm_subsystem.moveArm(dSpeed);
+    dAngle_old = objArm_subsystem.getArmAngle();
   }
 
   // Called once the command ends or is interrupted.

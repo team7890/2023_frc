@@ -33,7 +33,6 @@ public class Wrist_command extends CommandBase {
     objWrist_subsystem.moveWrist(dSpeed);
     // double dTest = objWrist_subsystem.getWristAngle();
     // objWrist_subsystem.getWristAngle();
-    
   }
 
   // Called once the command ends or is interrupted.

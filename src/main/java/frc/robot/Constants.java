@@ -37,15 +37,17 @@ public final class Constants {
     public static final int iDriver = 0;
   }
 
-  public static final class Arm{
+  public static final class Arm {
     public static final int iCurrentLimit = 40;
-    public static final double dArmSpeed = 0.2;
+    public static final double dArmSpeed = 0.3;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 175.0;                         // Need to set this
+    public static final double dOffset = -72.5;                         // Need to set this
+    public static final double kP = 0.01;
+    public static final double kD = 0.008;
   }
 
-  public static final class Forearm{
+  public static final class Forearm {
     public static final int iCurrentLimit = 40;
     public static final double dForearmSpeed = 0.09;
     public static final int iDIOPort = 1;
