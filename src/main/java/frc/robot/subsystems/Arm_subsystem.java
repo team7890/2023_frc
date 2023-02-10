@@ -54,5 +54,26 @@ public class Arm_subsystem extends SubsystemBase {
     
     return dArmAngle;
   }
+
+  public void moveArmToAngle(double dTargetAngle, double dAngle_old) {
+    double dSpeed = Constants.Arm.dArmSpeed;
+    double dCurrentAngle = getArmAngle();
+    double dDifference = dTargetAngle - dCurrentAngle; 
+    double dDeriv;
+    boolean bArrived = false;
+
+    // computes dCommand, the motor speed
+    dDeriv = dCurrentAngle - dAngle_old;
+    double dCommand = dDifference * Constants.Arm.kP - dDeriv * Constants.Arm.kD;
+    // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
+
+    // limits the max speed in either direction
+    if(dCommand > dSpeed) dCommand = dSpeed;
+    if(dCommand < (-1 * dSpeed)) dCommand = (-1 * dSpeed);
+    moveArm(dCommand);
+    if(Math.abs(dDifference) < 1.5) bArrived = true;
+    SmartDashboard.putBoolean("Arm Arrived", bArrived);
+
+  }
 }
 
