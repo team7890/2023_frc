@@ -40,28 +40,30 @@ public final class Constants {
 
   public static final class Arm {
     public static final int iCurrentLimit = 40;
-    public static final double dArmSpeed = 0.2;
+    public static final double dArmSpeedManual = 0.2;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = -72.5;                         // Need to set this
-    public static final double kP = 0.01;
-    public static final double kD = 0.008;
+    public static final double dOffset = 152.2;                         // Need to set this
+    public static final double dArmSpeedControlMax = 0.4;
+    public static final double kP = 0.03;
+    public static final double kD = 0.0;
+    public static final double dSpeedUpLimit = 0.05;
   }
 
   public static final class Forearm {
     public static final int iCurrentLimit = 40;
-    public static final double dForearmSpeed = 0.09;
+    public static final double dForearmSpeed = 0.2;
     public static final int iDIOPort = 1;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 230.0;                         // Need to set this
+    public static final double dOffset = 84.6;                         // Need to set this
   }
 
   public static final class Wrist{
     public static final int iCurrentLimit = 40;
     public static final double dWristSpeed = 0.5;
     public static final int iDIOPort = 2;
-    public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 13.5;                         // Need to set this
+    public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
+    public static final double dOffset = -96.2;                         // Need to set this
   }
 
 
@@ -111,8 +113,8 @@ public final class Constants {
         public static final double wheelBase = Units.inchesToMeters(20.75); //TODO: This must be tuned to specific robot
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
-        /* MENTOR TEST */
-        public static final Trajectory zeroTrajectory = new Trajectory(null);
+        /* zero value constants to stop driving in FollowTrajectory */
+        // public static final Trajectory zeroTrajectory = new Trajectory(null);
         public static final Translation2d zeroTranslation2d = new Translation2d();
 
         /* Swerve Kinematics 

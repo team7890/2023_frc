@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Utilities;
 
+import java.lang.Math;
+
 public class Arm_subsystem extends SubsystemBase {
 
   private CANSparkMax objArmMotor1 = new CANSparkMax(Constants.canIDs.iArmMotor1, MotorType.kBrushless);
@@ -55,8 +57,8 @@ public class Arm_subsystem extends SubsystemBase {
     return dArmAngle;
   }
 
-  public void moveArmToAngle(double dTargetAngle, double dAngle_old) {
-    double dSpeed = Constants.Arm.dArmSpeed;
+  public double moveArmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+    double dSpeedLimit = Constants.Arm.dArmSpeedControlMax;
     double dCurrentAngle = getArmAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
     double dDeriv;
@@ -68,12 +70,19 @@ public class Arm_subsystem extends SubsystemBase {
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
     // limits the max speed in either direction
-    if(dCommand > dSpeed) dCommand = dSpeed;
-    if(dCommand < (-1 * dSpeed)) dCommand = (-1 * dSpeed);
+    // if(dCommand > dSpeed) dCommand = dSpeed;                 //made a Utilities.java limit funtion in order to use instead.
+    // if(dCommand < (-1 * dSpeed)) dCommand = (-1 * dSpeed);   //made a Utilities.java limit funtion in order to use instead.
+    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
+      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
+    }
     moveArm(dCommand);
-    if(Math.abs(dDifference) < 1.5) bArrived = true;
+    if (Math.abs(dDifference) < 1.5) {
+      bArrived = true;
+    }
     SmartDashboard.putBoolean("Arm Arrived", bArrived);
-
+    SmartDashboard.putNumber("ArmControlSpeed", dCommand);
+    return dCommand;
   }
 }
 

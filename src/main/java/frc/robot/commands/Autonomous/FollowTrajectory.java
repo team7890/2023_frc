@@ -55,7 +55,7 @@ public class FollowTrajectory extends CommandBase {
         new PIDController(AutoConstants.kPYController, 0, 0),
         thetaController,
         drive::setModuleStates,
-        drive).andThen(() -> drive.drive(Constants.Swerve.zeroTranslation2d, 0.0, false, false)).schedule(); // Stops the robot //TODO: fix errors::MENTOR FIX?
+        drive).andThen(() -> drive.drive(Constants.Swerve.zeroTranslation2d, 0.0, true, false)).schedule(); // Stops the robot 
 
         // Reset odometry to the starting pose of the trajectory.
         // drive.resetOdometry(trajectory.getInitialPose());
@@ -64,10 +64,10 @@ public class FollowTrajectory extends CommandBase {
   @Override
   public void execute() {}
 
-  // @Override      //TODO: Fix Errors
-  // public void end(boolean interrupted) {
-  //   drive.drive(0, 0, 0, false);
-  // }
+  @Override      //TODO: Fix Errors
+  public void end(boolean interrupted) {
+    drive.drive(Constants.Swerve.zeroTranslation2d, 0.0, true, false);
+  }
 
   @Override
   public boolean isFinished() {

@@ -1,5 +1,6 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.lang.Math;
 
 
 public class Utilities {
@@ -23,6 +24,12 @@ public class Utilities {
         return dAngle - 180.0;
     }
 
+    public static double limitVariable(double dMinValue, double dVariable, double dMaxValue) {
+        double dValue;
+        dValue = Math.max(dVariable, dMinValue);
+        dValue = Math.min(dValue, dMaxValue);        
+        return dValue;
+    }
 
 
 } 
