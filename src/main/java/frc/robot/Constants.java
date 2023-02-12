@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.Trajectory;
+// import edu.wpi.first.math.trajectory.Trajectory;             //Unused
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
@@ -43,7 +43,7 @@ public final class Constants {
     public static final double dArmSpeedManual = 0.2;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 152.2;                         // Need to set this
+    public static final double dOffset = 152.2;                         //Sets 0.0 to Straight up
     public static final double dArmSpeedControlMax = 0.4;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
@@ -52,18 +52,26 @@ public final class Constants {
 
   public static final class Forearm {
     public static final int iCurrentLimit = 40;
-    public static final double dForearmSpeed = 0.2;
+    public static final double dForearmSpeedManual = 0.2;
     public static final int iDIOPort = 1;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 84.6;                         // Need to set this
+    public static final double dOffset = 84.6;                         //Sets 0.0 to Straight up
+    public static final double dForearmSpeedControlMax = 0.4;
+    public static final double kP = 0.03;
+    public static final double kD = 0.0;
+    public static final double dSpeedLimit = 0.05;
   }
 
   public static final class Wrist{
     public static final int iCurrentLimit = 40;
-    public static final double dWristSpeed = 0.5;
+    public static final double dWristSpeedManual = 0.5;
     public static final int iDIOPort = 2;
     public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
-    public static final double dOffset = -96.2;                         // Need to set this
+    public static final double dOffset = -96.2;                         //Sets 0.0 to Straight up
+    public static final double dWristSpeedControlMax = 0.4;
+    public static final double kP = 0.3;
+    public static final double kD = 0.0;
+    public static final double dSpeedLimit = 0.05;
   }
 
 
