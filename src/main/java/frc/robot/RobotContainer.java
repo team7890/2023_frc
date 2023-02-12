@@ -112,14 +112,21 @@ public class RobotContainer {
 
     m_CoPilotController.x().whileTrue(new Arm_command(objArm_subsystem, Constants.Arm.dArmSpeedManual, false, 0.0));         
     m_CoPilotController.y().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, false, 0.0));        
-    m_CoPilotController.rightBumper().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, 0.0));      
+    m_CoPilotController.rightBumper().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, 0.0));                    //Ask about - infront of Constants.Arm.dArmSpeedManual 
 
-    m_CoPilotController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dForearmSpeed));
-    m_CoPilotController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeed));
+    m_CoPilotController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dForearmSpeedManual, false, 0.0));
+    m_CoPilotController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, false, 0.0));
+    m_CoPilotController.leftBumper().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, true, 0.0));     //Also has the negative -
+    
+    m_CoPilotController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeedManual, false, 0.0));
+    m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, false, 0.0));
+    m_CoPilotController.rightTrigger().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, true, 0.0));   //Also has the negative -
 
-    m_CoPilotController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeed));
-    m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeed));
 
+    /* Testing New Command System */      //Looks Nice I Guess?
+    // m_CoPilotController.leftTrigger().whileTrue(new (objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, 0.0));                    //Ask about - infront of Constants.Arm.dArmSpeedManual 
+
+    
     /* Driver Buttons */    //For Swerve
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
     m_DriverController.y().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?

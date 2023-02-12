@@ -52,5 +52,28 @@ public class Wrist_subsystem extends SubsystemBase {
     return dWristAngle;
   }
 
+  public double moveWristToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+    double dSpeedLimit = Constants.Wrist.dWristSpeedControlMax;
+    double dCurrentAngle = getWristAngle();
+    double dDifference = dTargetAngle - dCurrentAngle; 
+    double dDeriv;
+    boolean bArrived = false;
 
+    // computes dCommand, the motor speed
+    dDeriv = dCurrentAngle - dAngle_old;
+    double dCommand = dDifference * Constants.Wrist.kP - dDeriv * Constants.Wrist.kD;
+    // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
+
+    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
+      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
+    }
+    moveWrist(dCommand);
+    if (Math.abs(dDifference) < 1.5) {
+      bArrived = true;
+    }
+    SmartDashboard.putBoolean("Wrist Arrived", bArrived);
+    SmartDashboard.putNumber("WristControlSpeed", dCommand);
+    return dCommand;
+  }
 }

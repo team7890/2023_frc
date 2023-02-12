@@ -12,11 +12,17 @@ public class Forearm_command extends CommandBase {
 
   private final double dSpeed;
   private final Forearm_subsystem objForearm_subsystem;
+  private final boolean bMode;
+  private final double dTargetAngle;
+  private double dAngle_old;
+  private double dCommand_old;
 
   /** Creates a new Forearm_command. */
-  public Forearm_command(Forearm_subsystem objForearm_subsystem_in, double dSpeed_in) {
+  public Forearm_command(Forearm_subsystem objForearm_subsystem_in, double dSpeed_in, boolean bMode_in, double dTargetAngle_in) {
     objForearm_subsystem = objForearm_subsystem_in;
     dSpeed = dSpeed_in;
+    bMode = bMode_in;       //if true moving Arm to an angle, if false move manually a fixed speed
+    dTargetAngle = dTargetAngle_in;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(objForearm_subsystem);
   }
@@ -25,12 +31,19 @@ public class Forearm_command extends CommandBase {
   @Override
   public void initialize() {
     objForearm_subsystem.stopForearm();
+    dAngle_old = objForearm_subsystem.getForearmAngle();
+    dCommand_old = 0.0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    objForearm_subsystem.moveForearm(dSpeed);
+    // objWrist_subsystem.moveWrist(dSpeed);
+    if (bMode) {
+      dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+    }
+    else objForearm_subsystem.moveForearm(dSpeed);
+    dAngle_old = objForearm_subsystem.getForearmAngle();
   }
 
   // Called once the command ends or is interrupted.
