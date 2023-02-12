@@ -1,7 +1,12 @@
 package frc.robot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.Command;
+
 import java.lang.Math;
 
+/* Testing Position Idea */
+// import frc.robot.commands.*;
+// import frc.robot.subsystems.*;
 
 public class Utilities {
 
@@ -32,4 +37,14 @@ public class Utilities {
     }
 
 
+    /* Testing Position Idea */
+    // private final Arm_subsystem objArm_subsystem = new Arm_subsystem();
+    // private final Forearm_subsystem objForearm_subsystem = new Forearm_subsystem();
+    // private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
+
+    // public Command PickupPosition() {
+    //     return new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, -10.5),                                //Doesn't like negative?
+    //     new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, true, 117.52),
+    //     new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 12.85);
+    // }
 } 
