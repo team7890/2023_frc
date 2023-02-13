@@ -42,7 +42,9 @@ public class Arm_command extends CommandBase {
     if (bMode) {
       dCommand_old = objArm_subsystem.moveArmToAngle(dTargetAngle, dAngle_old, dCommand_old);
     }
-    else objArm_subsystem.moveArm(dSpeed);
+    else {
+      dCommand_old = objArm_subsystem.moveArm(dSpeed, dCommand_old);
+    }
     dAngle_old = objArm_subsystem.getArmAngle();
   }
 

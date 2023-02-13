@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-//Arm Imports
-import frc.robot.subsystems.Arm_subsystem;
-//ForeArm Imports
-import frc.robot.subsystems.Forearm_subsystem;
-//Wrist Imports
-import frc.robot.subsystems.Wrist_subsystem;
+// //Arm Imports
+// import frc.robot.subsystems.Arm_subsystem;
+// //ForeArm Imports
+// import frc.robot.subsystems.Forearm_subsystem;
+// //Wrist Imports
+// import frc.robot.subsystems.Wrist_subsystem;
 //Begginning of Swerve Imports
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -61,7 +61,7 @@ public class RobotContainer {
   // private final JoystickButton robotCentric = new JoystickButton(m_DriverController, XboxController.Button.kLeftBumper.value);            //This is a change from team:364 code because we used CommandXboxController
 
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
+  private final Swerve_subsystem s_Swerve = new Swerve_subsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -112,19 +112,35 @@ public class RobotContainer {
 
     m_CoPilotController.x().whileTrue(new Arm_command(objArm_subsystem, Constants.Arm.dArmSpeedManual, false, 0.0));         
     m_CoPilotController.y().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, false, 0.0));        
-    m_CoPilotController.rightBumper().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, 0.0));                    //Ask about - infront of Constants.Arm.dArmSpeedManual 
+    // m_CoPilotController.rightBumper().whileTrue(new Arm_command(objArm_subsystem, -Constants.Arm.dArmSpeedManual, true, -16.7));                    //Ask about - infront of Constants.Arm.dArmSpeedManual 
 
-    m_CoPilotController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dForearmSpeedManual, false, 0.0));
-    m_CoPilotController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, false, 0.0));
-    m_CoPilotController.leftBumper().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dForearmSpeedManual, true, 0.0));     //Also has the negative -
+    m_CoPilotController.back().whileTrue(new Forearm_command(objForearm_subsystem, Constants.Forearm.dSpeedManual, false, 0.0));           // Back Button = Left button
+    m_CoPilotController.start().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dSpeedManual, false, 0.0));         // Start Button = Right button
+    // m_CoPilotController.leftBumper().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Forearm.dSpeedManual, true, 0.0));     //Also has the negative -
     
-    m_CoPilotController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dWristSpeedManual, false, 0.0));
-    m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, false, 0.0));
-    m_CoPilotController.rightTrigger().whileTrue(new Forearm_command(objForearm_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
+    m_CoPilotController.a().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dSpeedManual, false, 0.0));
+    m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dSpeedManual, false, 0.0));
+    // m_CoPilotController.rightTrigger().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
 
+    
 
     /* Testing New Command System */      //Looks Nice I Guess?
-    // m_CoPilotController.leftTrigger().whileTrue(Position_command.PickupPosition());                    //How to write?
+    // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, , ,));
+    
+    //Straight Up
+    m_CoPilotController.rightTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    
+    //Pick Up Verticle Cone 
+    m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -9.1, -118.28, -47.69));
+
+    //Drop Cone on Top Cone Level
+    // m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 22.0, 27.0, 11.72));
+
+    //Cube to Middle from front
+    m_CoPilotController.leftBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -22.0, 114.0, 4.2));
+
+    //Cube to Top from front
+    m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 9.1, 70.6, -2.8));
 
 
     /* Driver Buttons */    //For Swerve

@@ -10,17 +10,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants;                                         //Changed to our constant class
-import frc.robot.subsystems.Swerve;                                 //Changed to our swerve subsystem
+import frc.robot.subsystems.Swerve_subsystem;                                 //Changed to our swerve subsystem
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class FollowTrajectory extends CommandBase {
 
-  private final Swerve drive;
+  private final Swerve_subsystem drive;
   private Trajectory trajectory;
   private boolean toReset;
 
-  public FollowTrajectory(Swerve drive, String trajectoryFilePath, boolean toReset) {
+  public FollowTrajectory(Swerve_subsystem drive, String trajectoryFilePath, boolean toReset) {
     this.drive = drive;
     this.toReset = toReset;
     addRequirements(drive);

@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 // import edu.wpi.first.wpilibj2.command.Subsystem;                 // Unused
 import frc.robot.Constants;                                         // Changed to Constants.java
 import frc.robot.Constants.PathPlannerConstants;
-import frc.robot.subsystems.Swerve;                                 // Changed to our Swerve subsystem
+import frc.robot.subsystems.Swerve_subsystem;                                 // Changed to our Swerve subsystem
 
 public class FollowTrajectoryPathPlanner extends CommandBase {
 
-    private Swerve swerveSubsystem;
+    private Swerve_subsystem swerveSubsystem;
     private String pathName;
     private boolean zeroInitialPose;
     
@@ -26,7 +26,7 @@ public class FollowTrajectoryPathPlanner extends CommandBase {
     private boolean done = false;
     
     /** Creates a new FollowTrajectoryPathPlanner. */
-    public FollowTrajectoryPathPlanner(Swerve swerveSubsystem_in, String pathName_in, boolean zeroInitialPose_in) {
+    public FollowTrajectoryPathPlanner(Swerve_subsystem swerveSubsystem_in, String pathName_in, boolean zeroInitialPose_in) {
         swerveSubsystem = swerveSubsystem_in;
         addRequirements(swerveSubsystem_in);
     

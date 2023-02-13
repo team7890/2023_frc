@@ -40,38 +40,44 @@ public final class Constants {
 
   public static final class Arm {
     public static final int iCurrentLimit = 40;
-    public static final double dArmSpeedManual = 0.2;
+    public static final double dArmSpeedManual = 0.4;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
     public static final double dOffset = 152.2;                         //Sets 0.0 to Straight up
     public static final double dArmSpeedControlMax = 0.4;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
-    public static final double dSpeedUpLimit = 0.05;
+    public static final double dSpeedUpLimit = 0.005;
+    public static final double dMaxAngleLimit = 22.0;
+    public static final double dMinAngleLimit = -22.0;
   }
 
   public static final class Forearm {
     public static final int iCurrentLimit = 40;
-    public static final double dForearmSpeedManual = 0.2;
+    public static final double dSpeedManual = 0.2;
     public static final int iDIOPort = 1;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 84.6;                         //Sets 0.0 to Straight up
-    public static final double dForearmSpeedControlMax = 0.4;
+    public static final double dOffset = -84.9;                         //Sets 0.0 to Straight up
+    public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
-    public static final double dSpeedLimit = 0.05;
+    public static final double dSpeedUpLimit = 0.02;
+    public static final double dMaxAngleLimit = 150.0;
+    public static final double dMinAngleLimit = -155.0;
   }
 
   public static final class Wrist{
     public static final int iCurrentLimit = 40;
-    public static final double dWristSpeedManual = 0.5;
+    public static final double dSpeedManual = 0.3;
     public static final int iDIOPort = 2;
     public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
-    public static final double dOffset = -96.2;                         //Sets 0.0 to Straight up
-    public static final double dWristSpeedControlMax = 0.4;
-    public static final double kP = 0.3;
+    public static final double dOffset = 137.25;                         //Sets 0.0 to Straight up
+    public static final double dSpeedControlMax = 0.2;
+    public static final double kP = 0.03;
     public static final double kD = 0.0;
-    public static final double dSpeedLimit = 0.05;
+    public static final double dSpeedUpLimit = 0.02;
+    public static final double dMaxAngleLimit = 118.0;
+    public static final double dMinAngleLimit = -90.0;
   }
 
 

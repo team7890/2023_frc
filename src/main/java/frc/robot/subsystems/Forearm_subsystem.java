@@ -33,6 +33,14 @@ public class Forearm_subsystem extends SubsystemBase {
   }
 
   public void moveForearm(double dSpeed) {
+    double dSpeedLimit = Constants.Forearm.dSpeedControlMax;
+    double dCurrentAngle = getForearmAngle();
+    if (dCurrentAngle > Constants.Forearm.dMaxAngleLimit) {
+      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
+    }
+    else if (dCurrentAngle < Constants.Forearm.dMinAngleLimit) {
+      dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
+    }
     objForearmMotor.set(dSpeed);
   }
 
@@ -42,7 +50,7 @@ public class Forearm_subsystem extends SubsystemBase {
 
   public double getForearmAngle() {
     double dForearmAngle;
-    dForearmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Forearm.dOffset, Constants.Forearm.dDegreesPerRev);
+    dForearmAngle = Utilities.correctAngle(-objAbsEncoder.get(), Constants.Forearm.dOffset, Constants.Forearm.dDegreesPerRev);
 
     SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
     
@@ -50,7 +58,7 @@ public class Forearm_subsystem extends SubsystemBase {
   }
 
   public double moveForearmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
-    double dSpeedLimit = Constants.Forearm.dForearmSpeedControlMax;
+    double dSpeedLimit = Constants.Forearm.dSpeedControlMax;
     double dCurrentAngle = getForearmAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
     double dDeriv;
@@ -63,7 +71,7 @@ public class Forearm_subsystem extends SubsystemBase {
 
     dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
-      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
+      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Wrist.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveForearm(dCommand);
     if (Math.abs(dDifference) < 1.5) {

@@ -15,16 +15,28 @@ public class Mech_command extends CommandBase {
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
   private final Arm_subsystem objArm;
-  private double dArmAngle;
-  private double dForearmAngle;
-  private double dWristAngle;
-
+  //Arm Variables
+  private double dArmAngle_old;
+  private double dArmCommand_old;
+  private final double dArmTargetAngle;
+  //Forearm Variables
+  private double dForearmAngle_old;
+  private double dForearmCommand_old;
+  private final double dForearmTargetAngle;
+  //Wrist Variables
+  private double dWristAngle_old;
+  private double dWristCommand_old;
+  private final double dWristTargetAngle;
+  
 
   /** Creates a new Mech_command. */
-  public Mech_command(Wrist_subsystem objWrist_in, Forearm_subsystem objForearm_in, Arm_subsystem objArm_in) {
+  public Mech_command(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in, double dArmTargetAngle_in, double dForearmTargetAngle_in, double dWristTargetAngle_in) {
     objWrist = objWrist_in;
     objForearm = objForearm_in;
     objArm = objArm_in;
+    dArmTargetAngle = dArmTargetAngle_in;
+    dForearmTargetAngle = dForearmTargetAngle_in;
+    dWristTargetAngle = dWristTargetAngle_in;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(objWrist);
     addRequirements(objForearm);
@@ -34,20 +46,34 @@ public class Mech_command extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    dArmAngle = objArm.getArmAngle();
-    dForearmAngle = objForearm.getForearmAngle();
-    dWristAngle = objWrist.getWristAngle();
+    //Arm Variables
+    objArm.stopArm();
+    dArmAngle_old = objArm.getArmAngle();
+    dArmCommand_old = 0.0;
+    //Forearm Variables
+    objForearm.stopForearm();
+    dForearmAngle_old = objForearm.getForearmAngle();
+    dForearmCommand_old = 0.0;
+    //Wrist Variables
+    dWristAngle_old = objWrist.getWristAngle();
+    dWristCommand_old = 0.0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    dArmCommand_old = objArm.moveArmToAngle(dArmTargetAngle, dArmAngle_old, dArmCommand_old);
+    dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTargetAngle, dForearmAngle_old, dForearmCommand_old);
+    dWristCommand_old = objWrist.moveWristToAngle(dWristTargetAngle, dWristAngle_old, dWristCommand_old);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    objArm.stopArm();
+    objForearm.stopForearm();
+    objWrist.stopWrist();
+  }
 
   // Returns true when the command should end.
   @Override

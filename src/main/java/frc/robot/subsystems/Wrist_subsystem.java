@@ -36,6 +36,14 @@ public class Wrist_subsystem extends SubsystemBase {
   }
 
   public void moveWrist (double dSpeed) {
+    double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
+    double dCurrentAngle = getWristAngle();
+    if (dCurrentAngle > Constants.Wrist.dMaxAngleLimit) {
+      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
+    }
+    else if (dCurrentAngle < Constants.Wrist.dMinAngleLimit) {
+      dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
+    }
     objWristMotor.set(dSpeed);
   }
 
@@ -45,7 +53,7 @@ public class Wrist_subsystem extends SubsystemBase {
 
   public double getWristAngle() {
     double dWristAngle;
-    dWristAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
+    dWristAngle = Utilities.correctAngle(-objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
 
     SmartDashboard.putNumber("Wrist Angle", dWristAngle);
     
@@ -53,7 +61,7 @@ public class Wrist_subsystem extends SubsystemBase {
   }
 
   public double moveWristToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
-    double dSpeedLimit = Constants.Wrist.dWristSpeedControlMax;
+    double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
     double dCurrentAngle = getWristAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
     double dDeriv;
@@ -66,7 +74,7 @@ public class Wrist_subsystem extends SubsystemBase {
 
     dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
-      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
+      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Wrist.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveWrist(dCommand);
     if (Math.abs(dDifference) < 1.5) {

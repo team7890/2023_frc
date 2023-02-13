@@ -38,9 +38,23 @@ public class Arm_subsystem extends SubsystemBase {
     getArmAngle();
   }
 
-  public void moveArm(double dSpeed) {
+  public double moveArm(double dSpeed, double dSpeed_old) {
+    double dSpeedLimit = Constants.Arm.dArmSpeedControlMax;
+    double dCurrentAngle = getArmAngle();
+
+    if (Math.abs(dSpeed) > Math.abs(dSpeed_old)) {      //Checking that speed is increasing
+      dSpeed = dSpeed_old + Math.min(Math.abs(dSpeed - dSpeed_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dSpeed);
+    }
+
+    if (dCurrentAngle > Constants.Arm.dMaxAngleLimit) {
+      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
+    }
+    else if (dCurrentAngle < Constants.Arm.dMinAngleLimit) {
+      dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
+    }
     objArmMotor1.set(dSpeed);
     objArmMotor2.set(-dSpeed);
+    return dSpeed;
   }
 
   public void stopArm() {
@@ -67,16 +81,11 @@ public class Arm_subsystem extends SubsystemBase {
     // computes dCommand, the motor speed
     dDeriv = dCurrentAngle - dAngle_old;
     double dCommand = dDifference * Constants.Arm.kP - dDeriv * Constants.Arm.kD;
-    // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
-
-    // limits the max speed in either direction
-    // if(dCommand > dSpeed) dCommand = dSpeed;                 //made a Utilities.java limit funtion in order to use instead.
-    // if(dCommand < (-1 * dSpeed)) dCommand = (-1 * dSpeed);   //made a Utilities.java limit funtion in order to use instead.
     dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
     }
-    moveArm(dCommand);
+    moveArm(dCommand, dCommand_old);
     if (Math.abs(dDifference) < 1.5) {
       bArrived = true;
     }
