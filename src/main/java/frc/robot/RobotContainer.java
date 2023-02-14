@@ -41,6 +41,7 @@ public class RobotContainer {
   private final Arm_subsystem objArm_subsystem = new Arm_subsystem();
   private final Forearm_subsystem objForearm_subsystem = new Forearm_subsystem();
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
+  private final SignalLights_subsystem objSignalLights_subsystem = new SignalLights_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_CoPilotController = new CommandXboxController(Constants.Controllers.iCoPilot);
@@ -125,7 +126,7 @@ public class RobotContainer {
     // m_CoPilotController.rightTrigger().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
 
     // ButtonBox Stuff?
-    // ButtonOne.onTrue(SignalLights_subsystem.changeLightColor());
+    ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
 
     /* Testing New Command System */      //Looks Nice I Guess?
     // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, , ,));
@@ -150,7 +151,8 @@ public class RobotContainer {
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
     m_DriverController.leftTrigger().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
 
-    m_DriverController.a().onTrue(SignalLights_subsystem.changeLightColor());
+    // try with xbox controller but commented out when got button box above working
+    // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
   }
 
   /**
