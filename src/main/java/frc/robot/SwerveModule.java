@@ -4,7 +4,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
@@ -31,7 +31,7 @@ public class SwerveModule {
         this.angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID, "FastCAN");     // Added "FastCAN" network (bc it's wired on canivore)
+        angleEncoder = new CANCoder(moduleConstants.cancoderID, "rio");     // Added "FastCAN" network (bc it's wired on canivore)
         configAngleEncoder();
 
         /* Angle Motor Config */
@@ -78,9 +78,14 @@ public class SwerveModule {
         return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
     }
 
+    public double getAngleEncoder(){
+        return angleEncoder.getAbsolutePosition();
+    }
+
     public void resetToAbsolute(){
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
+        // SmartDashboard.getNumber("Falcon Angle", absolutePosition);
     }
 
     private void configAngleEncoder(){        
