@@ -43,8 +43,10 @@ public class RobotContainer {
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_CoPilotController =
-      new CommandXboxController(Constants.Controllers.iCoPilot);
+  private final CommandXboxController m_CoPilotController = new CommandXboxController(Constants.Controllers.iCoPilot);
+  
+  private final Joystick obj_ButtonBox = new  Joystick(Constants.Controllers.iButtonBox);
+  JoystickButton ButtonOne = new JoystickButton(obj_ButtonBox, 1);
 
   //For Swerve
   /* Controllers */
@@ -122,11 +124,12 @@ public class RobotContainer {
     m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dSpeedManual, false, 0.0));
     // m_CoPilotController.rightTrigger().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
 
-    
+    // ButtonBox Stuff?
+    // ButtonOne.onTrue(SignalLights_subsystem.changeLightColor());
 
     /* Testing New Command System */      //Looks Nice I Guess?
     // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, , ,));
-    
+
     //Straight Up
     m_CoPilotController.rightTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     
@@ -147,6 +150,7 @@ public class RobotContainer {
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
     m_DriverController.leftTrigger().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
 
+    m_DriverController.a().onTrue(SignalLights_subsystem.changeLightColor());
   }
 
   /**
