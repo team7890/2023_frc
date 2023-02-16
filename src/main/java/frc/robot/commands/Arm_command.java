@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Arm_subsystem;
 
+import java.lang.Math;
+
 public class Arm_command extends CommandBase {
 
   private final double dSpeed;
@@ -16,6 +18,7 @@ public class Arm_command extends CommandBase {
   private final double dTargetAngle;
   private double dAngle_old;
   private double dCommand_old;
+  private boolean bDone;
 
   /** Creates a new Arm_command. */
   public Arm_command(Arm_subsystem objArm_subsystem_in, double dSpeed_in, boolean bMode_in, double dTargetAngle_in) {
@@ -33,6 +36,7 @@ public class Arm_command extends CommandBase {
     objArm_subsystem.stopArm();
     dAngle_old = objArm_subsystem.getArmAngle();
     dCommand_old = 0.0;
+    bDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,6 +50,9 @@ public class Arm_command extends CommandBase {
       dCommand_old = objArm_subsystem.moveArm(dSpeed, dCommand_old);
     }
     dAngle_old = objArm_subsystem.getArmAngle();
+    if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
+      bDone = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -57,6 +64,6 @@ public class Arm_command extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return bDone;
   }
 }

@@ -47,7 +47,13 @@ public class RobotContainer {
   private final CommandXboxController m_CoPilotController = new CommandXboxController(Constants.Controllers.iCoPilot);
   
   private final Joystick obj_ButtonBox = new  Joystick(Constants.Controllers.iButtonBox);
-  JoystickButton ButtonOne = new JoystickButton(obj_ButtonBox, 1);
+  JoystickButton ButtonOne = new JoystickButton(obj_ButtonBox, 1);    // Top left
+  JoystickButton ButtonTwo = new JoystickButton(obj_ButtonBox, 2);    // Middle Left
+  JoystickButton ButtonThree = new JoystickButton(obj_ButtonBox, 3);  // Bottom Left
+  JoystickButton ButtonFour = new JoystickButton(obj_ButtonBox, 4);   // Top Right
+  JoystickButton ButtonFive = new JoystickButton(obj_ButtonBox, 5);   // Middle Right
+  JoystickButton ButtonSix = new JoystickButton(obj_ButtonBox, 6);    // Bottom Right
+  
 
   //For Swerve
   /* Controllers */
@@ -125,26 +131,49 @@ public class RobotContainer {
     m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dSpeedManual, false, 0.0));
     // m_CoPilotController.rightTrigger().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
 
-    // ButtonBox Stuff?
-    ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
+    
+    
+    
+    
+    
+    
+    /* ButtonBox Stuff */
+    // ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
+
+    ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    ButtonTwo.whileTrue(new Mech_cmd_group(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+
+
+
+
+
+
+
+
+
+    
 
     /* Testing New Command System */      //Looks Nice I Guess?
     // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, , ,));
 
     //Straight Up
-    m_CoPilotController.rightTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    // m_CoPilotController.rightTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     
     //Pick Up Verticle Cone 
-    m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -9.1, -118.28, -47.69));
+    // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -9.1, -118.28, -47.69));
 
     //Drop Cone on Top Cone Level
     // m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 22.0, 27.0, 11.72));
 
     //Cube to Middle from front
-    m_CoPilotController.leftBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -22.0, 114.0, 4.2));
+    // m_CoPilotController.leftBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -22.0, 114.0, 4.2));
 
     //Cube to Top from front
-    m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 9.1, 70.6, -2.8));
+    // m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 9.1, 70.6, -2.8));
 
 
     /* Driver Buttons */    //For Swerve

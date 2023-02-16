@@ -44,7 +44,7 @@ public final class Constants {
     public static final double dArmSpeedManual = 0.4;
     public static final int iDIOPort = 0;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 152.2;                         //Sets 0.0 to Straight up
+    public static final double dOffset = -27.2;                         //Sets 0.0 to Straight up
     public static final double dArmSpeedControlMax = 0.4;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
@@ -58,13 +58,13 @@ public final class Constants {
     public static final double dSpeedManual = 0.2;
     public static final int iDIOPort = 1;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = -84.9;                         //Sets 0.0 to Straight up
+    public static final double dOffset = -86.5;                         //Sets 0.0 to Straight up
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.02;
-    public static final double dMaxAngleLimit = 150.0;
-    public static final double dMinAngleLimit = -155.0;
+    public static final double dMaxAngleLimit = 180.0;
+    public static final double dMinAngleLimit = -180.0;
   }
 
   public static final class Wrist{
@@ -72,7 +72,7 @@ public final class Constants {
     public static final double dSpeedManual = 0.3;
     public static final int iDIOPort = 2;
     public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
-    public static final double dOffset = 137.25;                         //Sets 0.0 to Straight up
+    public static final double dOffset = 155.45;                         //Sets 0.0 to Straight up
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;

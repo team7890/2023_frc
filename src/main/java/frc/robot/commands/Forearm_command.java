@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Forearm_subsystem;
 
+import java.lang.Math;
+
 public class Forearm_command extends CommandBase {
 
   private final double dSpeed;
@@ -16,6 +18,7 @@ public class Forearm_command extends CommandBase {
   private final double dTargetAngle;
   private double dAngle_old;
   private double dCommand_old;
+  private boolean bDone;
 
   /** Creates a new Forearm_command. */
   public Forearm_command(Forearm_subsystem objForearm_subsystem_in, double dSpeed_in, boolean bMode_in, double dTargetAngle_in) {
@@ -33,6 +36,7 @@ public class Forearm_command extends CommandBase {
     objForearm_subsystem.stopForearm();
     dAngle_old = objForearm_subsystem.getForearmAngle();
     dCommand_old = 0.0;
+    bDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,8 +46,13 @@ public class Forearm_command extends CommandBase {
     if (bMode) {
       dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old);
     }
-    else objForearm_subsystem.moveForearm(dSpeed);
+    else {
+      objForearm_subsystem.moveForearm(dSpeed);
+    }
     dAngle_old = objForearm_subsystem.getForearmAngle();
+    if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
+      bDone = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -55,6 +64,6 @@ public class Forearm_command extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return bDone;
   }
 }

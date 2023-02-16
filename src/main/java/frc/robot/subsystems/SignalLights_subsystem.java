@@ -25,7 +25,7 @@ public class SignalLights_subsystem extends SubsystemBase {
   
   /** Creates a new SignalLights_subsystem. */
   public SignalLights_subsystem() {
-    objLED = new AddressableLED(9);
+    objLED = new AddressableLED(5);
     objLEDBufferYellow = new AddressableLEDBuffer(16);
     objLEDBufferPurple = new AddressableLEDBuffer(16);
     objLEDBufferOff = new AddressableLEDBuffer(16);

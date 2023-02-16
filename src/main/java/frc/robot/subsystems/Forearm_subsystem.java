@@ -36,10 +36,10 @@ public class Forearm_subsystem extends SubsystemBase {
     double dSpeedLimit = Constants.Forearm.dSpeedControlMax;
     double dCurrentAngle = getForearmAngle();
     if (dCurrentAngle > Constants.Forearm.dMaxAngleLimit) {
-      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
+      dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);    
     }
     else if (dCurrentAngle < Constants.Forearm.dMinAngleLimit) {
-      dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
+      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
     }
     objForearmMotor.set(dSpeed);
   }
@@ -66,7 +66,7 @@ public class Forearm_subsystem extends SubsystemBase {
 
     // computes dCommand, the motor speed
     dDeriv = dCurrentAngle - dAngle_old;
-    double dCommand = dDifference * Constants.Forearm.kP - dDeriv * Constants.Forearm.kD;
+    double dCommand = -dDifference * Constants.Forearm.kP + dDeriv * Constants.Forearm.kD;
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
     dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
