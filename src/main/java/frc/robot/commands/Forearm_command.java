@@ -45,14 +45,15 @@ public class Forearm_command extends CommandBase {
     // objWrist_subsystem.moveWrist(dSpeed);
     if (bMode) {
       dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
+        bDone = true;
+      }
     }
     else {
       objForearm_subsystem.moveForearm(dSpeed);
     }
     dAngle_old = objForearm_subsystem.getForearmAngle();
-    if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
-      bDone = true;
-    }
+    
   }
 
   // Called once the command ends or is interrupted.

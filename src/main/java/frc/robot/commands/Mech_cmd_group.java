@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -23,7 +24,11 @@ public class Mech_cmd_group extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new Arm_command(obj_Arm, Constants.Arm.dArmSpeedManual, true, 15.0),
-        new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual / 5.0, true, -15.0)
+        new SequentialCommandGroup(
+          Commands.waitSeconds(2),
+          new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual / 5.0, true, 15.0)
+        )
+        
       ),
       new Wrist_command(obj_Wrist, Constants.Wrist.dSpeedManual, true, 90)
     );

@@ -19,7 +19,7 @@ public class Forearm_subsystem extends SubsystemBase {
   private CANSparkMax objForearmMotor = new CANSparkMax(Constants.canIDs.iForearmMotor,MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
 
-  /** Creates a new Arm_subsystem. */
+  /** Creates a new Forearm_subsystem. */
   public Forearm_subsystem() {
     objForearmMotor.setIdleMode(IdleMode.kBrake);
     objForearmMotor.setSmartCurrentLimit(Constants.Forearm.iCurrentLimit);
@@ -50,8 +50,9 @@ public class Forearm_subsystem extends SubsystemBase {
 
   public double getForearmAngle() {
     double dForearmAngle;
-    dForearmAngle = Utilities.correctAngle(-objAbsEncoder.get(), Constants.Forearm.dOffset, Constants.Forearm.dDegreesPerRev);
+    dForearmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Forearm.dOffset, Constants.Forearm.dDegreesPerRev);
 
+    SmartDashboard.putNumber("Raw Forearm Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
     
     return dForearmAngle;
@@ -66,12 +67,12 @@ public class Forearm_subsystem extends SubsystemBase {
 
     // computes dCommand, the motor speed
     dDeriv = dCurrentAngle - dAngle_old;
-    double dCommand = -dDifference * Constants.Forearm.kP + dDeriv * Constants.Forearm.kD;
+    double dCommand = dDifference * Constants.Forearm.kP - dDeriv * Constants.Forearm.kD;
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
     dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
-      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Wrist.dSpeedUpLimit) * Math.signum(dCommand);
+      dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Forearm.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveForearm(dCommand);
     if (Math.abs(dDifference) < 1.5) {

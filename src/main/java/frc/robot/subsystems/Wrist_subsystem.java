@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+
+import com.ctre.phoenix.Util;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,18 +23,23 @@ public class Wrist_subsystem extends SubsystemBase {
   private CANSparkMax objWristMotor = new CANSparkMax(Constants.canIDs.iWristMotor,MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
 
-  /** Creates a new Arm_subsystem. */
+  /** Creates a new Wrist_subsystem. */
   public Wrist_subsystem() {
     objWristMotor.setIdleMode(IdleMode.kBrake);
     objWristMotor.setSmartCurrentLimit(Constants.Wrist.iCurrentLimit);
     objAbsEncoder = new DutyCycleEncoder(Constants.Wrist.iDIOPort);
     // objAbsEncoder.setDistancePerRotation(Constants.Wrist.dDegreesPerRev);
+    SmartDashboard.putNumber("Test Encoder", 0.0);
+    SmartDashboard.putNumber("Test Offset", 0.0);
+    SmartDashboard.putNumber("Test DegRev", 0.0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     getWristAngle();
+    double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
+    SmartDashboard.putNumber("Test Result", testResult);
   }
 
   public void moveWrist (double dSpeed) {
@@ -53,8 +60,10 @@ public class Wrist_subsystem extends SubsystemBase {
 
   public double getWristAngle() {
     double dWristAngle;
-    dWristAngle = Utilities.correctAngle(-objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
+    // dWristAngle = -Utilities.correctAngle(objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
+    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Wrist.dOffset, 42.0/18.0, true);
 
+    SmartDashboard.putNumber("Raw Wrist Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Wrist Angle", dWristAngle);
     
     return dWristAngle;

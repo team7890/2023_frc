@@ -66,6 +66,7 @@ public class Arm_subsystem extends SubsystemBase {
     double dArmAngle;
     dArmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Arm.dOffset, Constants.Arm.dDegreesPerRev);
 
+    SmartDashboard.putNumber("Raw Arm Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Arm Angle", dArmAngle);
     
     return dArmAngle;

@@ -34,8 +34,11 @@ public class Utilities {
     //          and when dOffset_in is set to 0.0
     //      dRatio is the ratio of encoder revolutions to mechanism revolutions, or the gear ratio from
     //          mechanism to encoder (if the encoder has an 18T pulley and the wrist has a 36T pulle, the ratio would be 2.0
+    //      bInvert is used to invert the rotation angle of the encoder
+    //          it should be true to reverse the encoder angle so that + motor speed results in increasing angle
+    //          so that control loop logic works correctly
     //      dAngle is the returned value which is between -180.0 and +180.0
-    public static double correctAngle2(double dEncoder_in, double dOffset_in, double dRatio) {
+    public static double correctAngle2(double dEncoder_in, double dOffset_in, double dRatio, boolean bInvert) {
         double dAngle;
         double dDegreesPerRev = 360.0 / dRatio;     // degrees of mechanism motion in one encoder revolution
 
@@ -45,6 +48,9 @@ public class Utilities {
         //      degrees per rev to translate the modulus result back into mechanism degrees and finally subtracting
         //      180 because the modulus results in a 0 to 360 result when -180 to +180 is desired
         dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev - 180.0;
+        if (bInvert) {
+            dAngle = -dAngle;
+        }
         return dAngle;
     }
 
