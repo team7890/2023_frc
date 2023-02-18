@@ -60,8 +60,8 @@ public class Wrist_subsystem extends SubsystemBase {
 
   public double getWristAngle() {
     double dWristAngle;
-    // dWristAngle = -Utilities.correctAngle(objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
-    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Wrist.dOffset, 42.0/18.0, true);
+    dWristAngle = -Utilities.correctAngle(objAbsEncoder.get() - 1.0, Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
+    // dWristAngle = Utilities.correctAngle2(objAbsEncoder.get() - 1.0, Constants.Wrist.dOffset, 42.0 / 18.0, true);
 
     SmartDashboard.putNumber("Raw Wrist Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Wrist Angle", dWristAngle);
@@ -86,7 +86,7 @@ public class Wrist_subsystem extends SubsystemBase {
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Wrist.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveWrist(dCommand);
-    if (Math.abs(dDifference) < 1.5) {
+    if (Math.abs(dDifference) < Constants.Wrist.dTolerance) {
       bArrived = true;
     }
     SmartDashboard.putBoolean("Wrist Arrived", bArrived);

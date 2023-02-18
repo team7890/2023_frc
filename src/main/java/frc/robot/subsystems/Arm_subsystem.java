@@ -87,7 +87,7 @@ public class Arm_subsystem extends SubsystemBase {
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveArm(dCommand, dCommand_old);
-    if (Math.abs(dDifference) < 1.5) {
+    if (Math.abs(dDifference) < Constants.Arm.dTolerance) {
       bArrived = true;
     }
     SmartDashboard.putBoolean("Arm Arrived", bArrived);

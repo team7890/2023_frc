@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
+import frc.robot.command_groups.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 //End of Swerve Imports
@@ -53,6 +54,8 @@ public class RobotContainer {
   JoystickButton ButtonFour = new JoystickButton(obj_ButtonBox, 4);   // Top Right
   JoystickButton ButtonFive = new JoystickButton(obj_ButtonBox, 5);   // Middle Right
   JoystickButton ButtonSix = new JoystickButton(obj_ButtonBox, 6);    // Bottom Right
+  JoystickButton ButtonSeven = new JoystickButton(obj_ButtonBox, 7);    // Bottom Right
+
   
 
   //For Swerve
@@ -140,12 +143,13 @@ public class RobotContainer {
     /* ButtonBox Stuff */
     // ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
 
-    ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     ButtonTwo.whileTrue(new Mech_cmd_group(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonFour.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonOne.whileTrue(new Pickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
-    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
 
 
 

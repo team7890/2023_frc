@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Wrist_subsystem;
 
 public class Wrist_command extends CommandBase {
@@ -35,6 +35,7 @@ public class Wrist_command extends CommandBase {
     dAngle_old = objWrist_subsystem.getWristAngle();
     dCommand_old = 0.0;
     bDone = false;
+    System.out.println("Wrist_command init");  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,12 +44,14 @@ public class Wrist_command extends CommandBase {
     // objWrist_subsystem.moveWrist(dSpeed);
     if (bMode) {
       dCommand_old = objWrist_subsystem.moveWristToAngle(dTargetAngle, dAngle_old, dCommand_old);
-      if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
+      dAngle_old = objWrist_subsystem.getWristAngle();
+      if (Math.abs(dTargetAngle - dAngle_old) < Constants.Wrist.dTolerance) {
         bDone = true; 
       }
     }
-    else objWrist_subsystem.moveWrist(dSpeed);
-    dAngle_old = objWrist_subsystem.getWristAngle();
+    else {
+      objWrist_subsystem.moveWrist(dSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -60,6 +63,6 @@ public class Wrist_command extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return bDone;
   }
 }

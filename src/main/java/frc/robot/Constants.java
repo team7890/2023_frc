@@ -51,6 +51,7 @@ public final class Constants {
     public static final double dSpeedUpLimit = 0.005;
     public static final double dMaxAngleLimit = 22.0;
     public static final double dMinAngleLimit = -22.0;
+    public static final double dTolerance = 1.0;                      
   }
 
   public static final class Forearm {
@@ -63,8 +64,9 @@ public final class Constants {
     public static final double kP = 0.03;
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.02;
-    public static final double dMaxAngleLimit = 160.0;
-    public static final double dMinAngleLimit = -146.0;
+    public static final double dMaxAngleLimit = 150.0;
+    public static final double dMinAngleLimit = -145.0;
+    public static final double dTolerance = 1.0;
   }
 
   public static final class Wrist{
@@ -79,8 +81,9 @@ public final class Constants {
     public static final double dSpeedUpLimit = 0.02;
     // public static final double dMaxAngleLimit = 118.0;
     // public static final double dMinAngleLimit = -90.0;
-    public static final double dMaxAngleLimit = 119.0;
+    public static final double dMaxAngleLimit = 110.0;
     public static final double dMinAngleLimit = -104.5;
+    public static final double dTolerance = 1.0;
   }
 
 
