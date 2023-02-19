@@ -59,7 +59,7 @@ public final class Constants {
     public static final double dSpeedManual = 0.2;
     public static final int iDIOPort = 1;
     public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = 86.0;                         //Sets 0.0 to Straight up
+    public static final double dOffset = 29.39;                         //Sets 0.0 to Straight up
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
@@ -74,7 +74,7 @@ public final class Constants {
     public static final double dSpeedManual = 0.3;
     public static final int iDIOPort = 2;
     public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
-    public static final double dOffset = -156.8;                          //Sets 0.0 to Straight up
+    public static final double dOffset = 133.5;                          //Sets 0.0 to Straight up
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
@@ -84,6 +84,11 @@ public final class Constants {
     public static final double dMaxAngleLimit = 110.0;
     public static final double dMinAngleLimit = -104.5;
     public static final double dTolerance = 1.0;
+  }
+
+  public static final class Grabber{
+    // Solenoids
+    public static final int iChannel = 3;
   }
 
 

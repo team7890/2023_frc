@@ -43,6 +43,7 @@ public class RobotContainer {
   private final Forearm_subsystem objForearm_subsystem = new Forearm_subsystem();
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
   private final SignalLights_subsystem objSignalLights_subsystem = new SignalLights_subsystem();
+  private final Grabber_subsystem objGrabber_subsystem = new Grabber_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_CoPilotController = new CommandXboxController(Constants.Controllers.iCoPilot);
@@ -55,6 +56,7 @@ public class RobotContainer {
   JoystickButton ButtonFive = new JoystickButton(obj_ButtonBox, 5);   // Middle Right
   JoystickButton ButtonSix = new JoystickButton(obj_ButtonBox, 6);    // Bottom Right
   JoystickButton ButtonSeven = new JoystickButton(obj_ButtonBox, 7);    // Bottom Right
+  JoystickButton ButtonEight = new JoystickButton(obj_ButtonBox, 8);    // Middle Bottom
 
   
 
@@ -96,7 +98,8 @@ public class RobotContainer {
         () -> -m_DriverController.getLeftY(), 
         () -> -m_DriverController.getLeftX(),
         () -> -m_DriverController.getRightX(),
-        () -> m_DriverController.leftBumper().getAsBoolean()
+        // () -> m_DriverController.leftBumper().getAsBoolean()
+        () -> false     // Never using Robot Centric Mode
       )
     );
 
@@ -143,13 +146,14 @@ public class RobotContainer {
     /* ButtonBox Stuff */
     // ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
 
+    ButtonOne.whileTrue(new Pickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     ButtonTwo.whileTrue(new Mech_cmd_group(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     ButtonFour.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonOne.whileTrue(new Pickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
 
 
 

@@ -22,9 +22,9 @@ import frc.robot.commands.Wrist_command;
 public class Pickup extends SequentialCommandGroup {
 
   // Target Positions
-  double dArmTarget = -15.8;
+  double dArmTarget = -10.5;
   double dForearmTarget = -116.4;
-  double dWristTarget = -40.9;
+  double dWristTarget = -50.1;
   //Raw Wrist = 1.4
 
   /** Creates a new Mech_cmd_group. */
@@ -37,10 +37,11 @@ public class Pickup extends SequentialCommandGroup {
         new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget),
         new SequentialCommandGroup(
           new WaitCommand(0.25),
-          new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget),
           new Wrist_command(obj_Wrist, Constants.Wrist.dSpeedManual, true, dWristTarget)
         )
-      )
+      ),
+      new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget)
+
     );
   }
 }

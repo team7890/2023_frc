@@ -47,9 +47,13 @@ public class Utilities {
         //      to achieve a periodic function again from a continuous encoder wrap, then multiplying by the
         //      degrees per rev to translate the modulus result back into mechanism degrees and finally subtracting
         //      180 because the modulus results in a 0 to 360 result when -180 to +180 is desired
-        dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev - 180.0;
+
+        // dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev - 180.0;
         if (bInvert) {
+            dAngle = ((dEncoder_in + dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev - 180.0;
             dAngle = -dAngle;
+        } else {
+            dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev - 180.0;
         }
         return dAngle;
     }
