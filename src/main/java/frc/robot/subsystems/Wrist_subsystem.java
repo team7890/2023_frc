@@ -62,7 +62,7 @@ public class Wrist_subsystem extends SubsystemBase {
     double dWristAngle;
     // apply - here if + motor speed results in a decreasing angle (make it dWristAngle = -Utilities.correct...)
     // dWristAngle = -Utilities.correctAngle(objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
-    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get() - 1.0, Constants.Wrist.dOffset, 42.0 / 18.0, true);
+    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Wrist.dOffset, 42.0 / 18.0, true);
 
     SmartDashboard.putNumber("Raw Wrist Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Wrist Angle", dWristAngle);
