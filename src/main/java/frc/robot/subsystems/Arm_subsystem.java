@@ -64,7 +64,7 @@ public class Arm_subsystem extends SubsystemBase {
 
   public double getArmAngle() {
     double dArmAngle;
-    dArmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Arm.dOffset, Constants.Arm.dDegreesPerRev);
+    dArmAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Arm.dOffset, 1.0, false);
 
     SmartDashboard.putNumber("Raw Arm Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Arm Angle", dArmAngle);
@@ -72,7 +72,7 @@ public class Arm_subsystem extends SubsystemBase {
     return dArmAngle;
   }
 
-  public double moveArmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+  public double moveArmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
     double dSpeedLimit = Constants.Arm.dArmSpeedControlMax;
     double dCurrentAngle = getArmAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
@@ -82,7 +82,7 @@ public class Arm_subsystem extends SubsystemBase {
     // computes dCommand, the motor speed
     dDeriv = dCurrentAngle - dAngle_old;
     double dCommand = dDifference * Constants.Arm.kP - dDeriv * Constants.Arm.kD;
-    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
     }

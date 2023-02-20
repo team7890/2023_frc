@@ -50,7 +50,7 @@ public class Forearm_subsystem extends SubsystemBase {
 
   public double getForearmAngle() {
     double dForearmAngle;
-    dForearmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Forearm.dOffset, Constants.Forearm.dDegreesPerRev);
+    dForearmAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Forearm.dOffset, 1.0, false);
 
     SmartDashboard.putNumber("Raw Forearm Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
@@ -58,7 +58,7 @@ public class Forearm_subsystem extends SubsystemBase {
     return dForearmAngle;
   }
 
-  public double moveForearmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+  public double moveForearmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
     double dSpeedLimit = Constants.Forearm.dSpeedControlMax;
     double dCurrentAngle = getForearmAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
@@ -70,7 +70,7 @@ public class Forearm_subsystem extends SubsystemBase {
     double dCommand = dDifference * Constants.Forearm.kP - dDeriv * Constants.Forearm.kD;
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
-    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Forearm.dSpeedUpLimit) * Math.signum(dCommand);
     }

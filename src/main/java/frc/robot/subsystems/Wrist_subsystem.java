@@ -70,7 +70,7 @@ public class Wrist_subsystem extends SubsystemBase {
     return dWristAngle;
   }
 
-  public double moveWristToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+  public double moveWristToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
     double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
     double dCurrentAngle = getWristAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
@@ -82,7 +82,7 @@ public class Wrist_subsystem extends SubsystemBase {
     double dCommand = dDifference * Constants.Wrist.kP - dDeriv * Constants.Wrist.kD;
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
-    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Wrist.dSpeedUpLimit) * Math.signum(dCommand);
     }

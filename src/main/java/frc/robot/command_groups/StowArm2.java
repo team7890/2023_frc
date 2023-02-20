@@ -19,7 +19,7 @@ import frc.robot.commands.Wrist_command;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class StowArm extends SequentialCommandGroup {
+public class StowArm2 extends SequentialCommandGroup {
 
   // Target Positions
   double dArmTarget = 2.0;
@@ -27,7 +27,7 @@ public class StowArm extends SequentialCommandGroup {
   double dWristTarget = 105.0;
 
   /** Creates a new Mech_cmd_group. */
-  public StowArm(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
+  public StowArm2(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

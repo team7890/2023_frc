@@ -44,7 +44,7 @@ public class Arm_command extends CommandBase {
   public void execute() {
     // objArm_subsystem.moveArm(dSpeed);
     if (bMode) {
-      dCommand_old = objArm_subsystem.moveArmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      dCommand_old = objArm_subsystem.moveArmToAngle(dTargetAngle, dAngle_old, dCommand_old, 1.0);
       dAngle_old = objArm_subsystem.getArmAngle();
       if (Math.abs(dTargetAngle - dAngle_old) < Constants.Arm.dTolerance) {
         bDone = true;

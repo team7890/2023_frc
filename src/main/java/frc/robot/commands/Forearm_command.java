@@ -43,7 +43,7 @@ public class Forearm_command extends CommandBase {
   @Override
   public void execute() {
     if (bMode) {
-      dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old, 1.0);
       dAngle_old = objForearm_subsystem.getForearmAngle();
       if (Math.abs(dTargetAngle - dAngle_old) < Constants.Forearm.dTolerance) {
         bDone = true;

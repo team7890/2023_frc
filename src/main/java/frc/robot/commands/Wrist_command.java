@@ -43,7 +43,7 @@ public class Wrist_command extends CommandBase {
   public void execute() {
     // objWrist_subsystem.moveWrist(dSpeed);
     if (bMode) {
-      dCommand_old = objWrist_subsystem.moveWristToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      dCommand_old = objWrist_subsystem.moveWristToAngle(dTargetAngle, dAngle_old, dCommand_old, 1.0);
       dAngle_old = objWrist_subsystem.getWristAngle();
       if (Math.abs(dTargetAngle - dAngle_old) < Constants.Wrist.dTolerance) {
         bDone = true; 

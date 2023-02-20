@@ -50,7 +50,12 @@ public class Utilities {
         //      if the angle is less than -180 and subtract 360 if the angle is more than +180 so that the result
         //      is scaled to between -180 and +180 degrees.
 
-        dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev;
+        if (bInvert) {
+            dAngle = ((dEncoder_in + dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev;
+        }
+        else {
+            dAngle = ((dEncoder_in - dOffset_in / dDegreesPerRev) % dRatio) * dDegreesPerRev;
+        }
         if (dAngle < -180.0) dAngle = dAngle + 360.0;
         if (dAngle > 180.0) dAngle = dAngle - 360.0;
         if (bInvert) dAngle = -dAngle;
