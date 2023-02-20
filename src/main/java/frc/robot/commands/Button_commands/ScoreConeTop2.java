@@ -28,6 +28,9 @@ public class ScoreConeTop2 extends CommandBase {
   private int iState;
   private int iCounter;
 
+  private double dArmSoftStopSpeed;
+  private double dForearmSoftStopSpeed;
+
   // Final Target Positions
   double dArmTarget = 22.0;
   double dForearmTarget = 29.5;
@@ -85,8 +88,12 @@ public class ScoreConeTop2 extends CommandBase {
         break;
       case 11:  // forearm has gotten to 20 degrees on the high scoring side and we will pause in this position for 300 ms or so
                 // in order to flip the cone
-        objArm.stopArm();
-        objForearm.stopForearm();
+        // objArm.stopArm();
+        dArmSoftStopSpeed = objArm.softStop();
+        System.out.println("dArmSoftStopSpeed = " + dArmSoftStopSpeed);
+        // objForearm.stopForearm();
+        dForearmSoftStopSpeed = objForearm.softStop();
+        System.out.println("dForearmSoftStopSpeed = " + dForearmSoftStopSpeed);
         objWrist.stopWrist();
         iCounter = iCounter + 1;
         if (iCounter > 15) iState = 20; // cone has flipped, now proceed to the three target angles

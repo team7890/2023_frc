@@ -18,6 +18,7 @@ public class Forearm_subsystem extends SubsystemBase {
 
   private CANSparkMax objForearmMotor = new CANSparkMax(Constants.canIDs.iForearmMotor,MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
+  private double dSpeed;
 
   /** Creates a new Forearm_subsystem. */
   public Forearm_subsystem() {
@@ -56,6 +57,18 @@ public class Forearm_subsystem extends SubsystemBase {
     SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
     
     return dForearmAngle;
+  }
+
+  public double softStop() {
+    dSpeed = objForearmMotor.get();
+    if (dSpeed > 0.0) {
+      dSpeed = Math.max(dSpeed - Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    else {
+      dSpeed = Math.min(dSpeed + Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    objForearmMotor.set(dSpeed);
+    return Math.abs(dSpeed);
   }
 
   public double moveForearmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
