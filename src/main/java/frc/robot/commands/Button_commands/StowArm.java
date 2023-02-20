@@ -25,6 +25,8 @@ public class StowArm extends CommandBase {
   private double dWristAngle_old;
   private double dWristCommand_old;
 
+  private int iState;
+
   // Final Target Positions
   double dArmTarget = 2.0;
   double dForearmTarget = -140.0;
@@ -56,49 +58,44 @@ public class StowArm extends CommandBase {
     objWrist.stopWrist();
     dWristAngle_old = objWrist.getWristAngle();
     dWristCommand_old = 0.0;
+
+    iState = 0;
+    if (objForearm.getForearmAngle() > -20.0) iState = 10;
+    else iState = 12;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (objForearm.getForearmAngle() > 0.0) {
-      dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
-      if (objWrist.getWristAngle() < -10.0) {
-        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 5.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
-      }
-      else {
+    switch (iState) {
+      case 10:          //if the forearm is out on the high scoring side
+                        // first move the wirst up (means the wrist is going to a negative angle)
+        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
+        if (objWrist.getWristAngle() < -10.0) iState = 11;
+        break;
+      case 11:          // then move the arm so that it doesnt stick out of the front of the robot (to 0.0 degrees)
+                        // then move the forearm over the top so that its on the stowing side of the robot
+        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 1.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
+        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 1.0);
+        if (objForearm.getForearmAngle() < -20.0) iState = 12;
+        break;
+      case 12:          // stop arm and forearm until the wrist is clear
+                        // once the forearm gets over the top (towards stow position) then move wrist to target
         objArm.stopArm();
         objForearm.stopForearm();
-      }
+        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 0.3);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.3);
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 1.0);
+        if (objWrist.getWristAngle() > 20.0) iState = 13;
+        break;
+      case 13:          // Move everything to stow targets
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 1.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 1.0);
+        break;
     }
-    else {
-      if (objForearm.getForearmAngle() < -20.0) {
-        
-        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
-        if (objWrist.getWristAngle() > 20.0) {
-          dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 3.0);
-          if (objArm.getArmAngle() > -2.0) {
-            dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
-          }
-          else {
-            objForearm.stopForearm();
-          }
-        }
-        else {
-          objArm.stopArm();
-        }
-      }
-      else {
-        objWrist.stopWrist();
-        objArm.stopArm();
-        
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
-      }
-
-    }
-
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
