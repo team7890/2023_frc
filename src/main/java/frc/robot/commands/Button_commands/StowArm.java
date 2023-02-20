@@ -26,6 +26,8 @@ public class StowArm extends CommandBase {
   private double dWristCommand_old;
 
   private int iState;
+  private double dArmSoftStopSpeed;
+  private double dForearmSoftStopSpeed;
 
   // Final Target Positions
   double dArmTarget = 2.0;
@@ -83,10 +85,12 @@ public class StowArm extends CommandBase {
         break;
       case 12:          // stop arm and forearm until the wrist is clear
                         // once the forearm gets over the top (towards stow position) then move wrist to target
-        objArm.stopArm();
-        objForearm.stopForearm();
-        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 0.3);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.3);
+        dArmSoftStopSpeed = objArm.softStop();
+        System.out.println("dArmSoftStopSpeed = " + dArmSoftStopSpeed);
+        // objArm.stopArm();
+        dForearmSoftStopSpeed = objForearm.softStop();
+        System.out.println("dForearmSoftStopSpeed = " + dForearmSoftStopSpeed);
+        // objForearm.stopForearm();
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 1.0);
         if (objWrist.getWristAngle() > 20.0) iState = 13;
         break;
