@@ -22,6 +22,8 @@ public class Arm_subsystem extends SubsystemBase {
   private CANSparkMax objArmMotor1 = new CANSparkMax(Constants.canIDs.iArmMotor1, MotorType.kBrushless);
   private CANSparkMax objArmMotor2 = new CANSparkMax(Constants.canIDs.iArmMotor2, MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
+  private double dSpeed1;
+  private double dSpeed2;
 
   /** Creates a new Arm_subsystem. */
   public Arm_subsystem() {
@@ -62,16 +64,33 @@ public class Arm_subsystem extends SubsystemBase {
     objArmMotor2.stopMotor();
   }
 
+  public double softStop() {
+    dSpeed1 = objArmMotor1.get();
+    dSpeed2 = objArmMotor2.get();
+    if (dSpeed1 > 0.0) {
+      dSpeed1 = Math.max(dSpeed1 - Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed2 = Math.min(dSpeed2 + Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    else {
+      dSpeed1 = Math.min(dSpeed1 + Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed2 = Math.max(dSpeed2 - Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    objArmMotor1.set(dSpeed1);
+    objArmMotor2.set(dSpeed2);
+    return Math.abs(dSpeed1);
+  }
+
   public double getArmAngle() {
     double dArmAngle;
-    dArmAngle = Utilities.correctAngle(objAbsEncoder.get(), Constants.Arm.dOffset, Constants.Arm.dDegreesPerRev);
+    dArmAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Arm.dOffset, 1.0, false);
 
+    SmartDashboard.putNumber("Raw Arm Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Arm Angle", dArmAngle);
     
     return dArmAngle;
   }
 
-  public double moveArmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old) {
+  public double moveArmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
     double dSpeedLimit = Constants.Arm.dArmSpeedControlMax;
     double dCurrentAngle = getArmAngle();
     double dDifference = dTargetAngle - dCurrentAngle; 
@@ -81,12 +100,12 @@ public class Arm_subsystem extends SubsystemBase {
     // computes dCommand, the motor speed
     dDeriv = dCurrentAngle - dAngle_old;
     double dCommand = dDifference * Constants.Arm.kP - dDeriv * Constants.Arm.kD;
-    dCommand = Utilities.limitVariable(-dSpeedLimit, dCommand, dSpeedLimit);
+    dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing
       dCommand = dCommand_old + Math.min(Math.abs(dCommand - dCommand_old), Constants.Arm.dSpeedUpLimit) * Math.signum(dCommand);
     }
     moveArm(dCommand, dCommand_old);
-    if (Math.abs(dDifference) < 1.5) {
+    if (Math.abs(dDifference) < Constants.Arm.dTolerance) {
       bArrived = true;
     }
     SmartDashboard.putBoolean("Arm Arrived", bArrived);

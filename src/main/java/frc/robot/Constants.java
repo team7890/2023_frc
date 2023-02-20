@@ -43,42 +43,53 @@ public final class Constants {
     public static final int iCurrentLimit = 40;
     public static final double dArmSpeedManual = 0.4;
     public static final int iDIOPort = 0;
-    public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = -27.2;                         //Sets 0.0 to Straight up
+    // public static final double dDegreesPerRev = 360.0;
+    public static final double dOffset = 153.83;                         //Sets 0.0 to Straight up
     public static final double dArmSpeedControlMax = 0.4;
-    public static final double kP = 0.03;
+    public static final double kP = 0.1;
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.005;
     public static final double dMaxAngleLimit = 22.0;
     public static final double dMinAngleLimit = -22.0;
+    public static final double dTolerance = 1.0;                      
   }
 
   public static final class Forearm {
     public static final int iCurrentLimit = 40;
     public static final double dSpeedManual = 0.2;
     public static final int iDIOPort = 1;
-    public static final double dDegreesPerRev = 360.0;
-    public static final double dOffset = -86.5;                         //Sets 0.0 to Straight up
+    // public static final double dDegreesPerRev = 360.0;
+    public static final double dOffset = -150.0;                         //Sets 0.0 to Straight up
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.02;
-    public static final double dMaxAngleLimit = 180.0;
-    public static final double dMinAngleLimit = -180.0;
+    public static final double dMaxAngleLimit = 150.0;
+    public static final double dMinAngleLimit = -145.0;
+    public static final double dTolerance = 1.0;
   }
 
   public static final class Wrist{
     public static final int iCurrentLimit = 40;
     public static final double dSpeedManual = 0.3;
     public static final int iDIOPort = 2;
-    public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
-    public static final double dOffset = 155.45;                         //Sets 0.0 to Straight up
+    // public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
+    // public static final double dOffset = -97.58;                          //Sets 0.0 to Straight up
+    public static final double dOffset = -123.9;
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.02;
-    public static final double dMaxAngleLimit = 118.0;
-    public static final double dMinAngleLimit = -90.0;
+    // public static final double dMaxAngleLimit = 118.0;
+    // public static final double dMinAngleLimit = -90.0;
+    public static final double dMaxAngleLimit = 110.0;
+    public static final double dMinAngleLimit = -104.5;
+    public static final double dTolerance = 1.0;
+  }
+
+  public static final class Grabber{
+    // Solenoids
+    public static final int iChannel = 3;
   }
 
 

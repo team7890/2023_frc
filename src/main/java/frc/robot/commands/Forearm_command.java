@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Forearm_subsystem;
 
 import java.lang.Math;
@@ -42,17 +42,19 @@ public class Forearm_command extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // objWrist_subsystem.moveWrist(dSpeed);
     if (bMode) {
-      dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      dCommand_old = objForearm_subsystem.moveForearmToAngle(dTargetAngle, dAngle_old, dCommand_old, 1.0);
+      dAngle_old = objForearm_subsystem.getForearmAngle();
+      if (Math.abs(dTargetAngle - dAngle_old) < Constants.Forearm.dTolerance) {
+        bDone = true;
+      }
     }
     else {
       objForearm_subsystem.moveForearm(dSpeed);
     }
-    dAngle_old = objForearm_subsystem.getForearmAngle();
-    if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
-      bDone = true;
-    }
+    System.out.println("Forearm Target:  " + dTargetAngle);
+    System.out.println("Forearm Angle:  " + dAngle_old);
+    System.out.println("Forearm Done:  " + bDone);
   }
 
   // Called once the command ends or is interrupted.

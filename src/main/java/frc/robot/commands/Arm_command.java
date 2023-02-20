@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm_subsystem;
 
 import java.lang.Math;
@@ -44,15 +44,15 @@ public class Arm_command extends CommandBase {
   public void execute() {
     // objArm_subsystem.moveArm(dSpeed);
     if (bMode) {
-      dCommand_old = objArm_subsystem.moveArmToAngle(dTargetAngle, dAngle_old, dCommand_old);
+      dCommand_old = objArm_subsystem.moveArmToAngle(dTargetAngle, dAngle_old, dCommand_old, 1.0);
+      dAngle_old = objArm_subsystem.getArmAngle();
+      if (Math.abs(dTargetAngle - dAngle_old) < Constants.Arm.dTolerance) {
+        bDone = true;
+      }
     }
     else {
       dCommand_old = objArm_subsystem.moveArm(dSpeed, dCommand_old);
-    }
-    dAngle_old = objArm_subsystem.getArmAngle();
-    if (Math.abs(dTargetAngle - dAngle_old) < 1.0) {
-      bDone = true;
-    }
+    }   
   }
 
   // Called once the command ends or is interrupted.
