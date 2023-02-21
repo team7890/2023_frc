@@ -22,6 +22,7 @@ public class Wrist_subsystem extends SubsystemBase {
 
   private CANSparkMax objWristMotor = new CANSparkMax(Constants.canIDs.iWristMotor,MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
+  private double dSpeed;
 
   /** Creates a new Wrist_subsystem. */
   public Wrist_subsystem() {
@@ -56,6 +57,18 @@ public class Wrist_subsystem extends SubsystemBase {
 
   public void stopWrist() {
     objWristMotor.stopMotor();
+  }
+
+  public double softStop() {
+    dSpeed = objWristMotor.get();
+    if (dSpeed > 0.0) {
+      dSpeed = Math.max(dSpeed - Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    else {
+      dSpeed = Math.min(dSpeed + Constants.Arm.dSpeedUpLimit, 0.0);
+    }
+    objWristMotor.set(dSpeed);
+    return Math.abs(dSpeed);
   }
 
   public double getWristAngle() {

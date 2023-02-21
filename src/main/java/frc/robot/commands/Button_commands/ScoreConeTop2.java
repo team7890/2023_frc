@@ -30,6 +30,7 @@ public class ScoreConeTop2 extends CommandBase {
 
   private double dArmSoftStopSpeed;
   private double dForearmSoftStopSpeed;
+  private double dWristSoftStopSpeed;
 
   // Final Target Positions
   double dArmTarget = 22.0;
@@ -75,7 +76,7 @@ public class ScoreConeTop2 extends CommandBase {
                 // moving arm to a position just inside the robot to make sure we don't go outside on both sides
                 // moving forearm to the target which is up and over the top
                 // moving wrist to the closer of -35.0 and 35.0 to go over the top and not reach too high
-        dArmCommand_old = objArm.moveArmToAngle(-5.0, dArmAngle_old, dArmCommand_old, 1.0);
+        dArmCommand_old = objArm.moveArmToAngle(-5.0, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         if (objWrist.getWristAngle() > 0.0) {
           dWristCommand_old = objWrist.moveWristToAngle(35.0, dWristAngle_old, dWristCommand_old, 3.0);
@@ -88,22 +89,25 @@ public class ScoreConeTop2 extends CommandBase {
         break;
       case 11:  // forearm has gotten to 20 degrees on the high scoring side and we will pause in this position for 300 ms or so
                 // in order to flip the cone
-        // objArm.stopArm();
-        dArmSoftStopSpeed = objArm.softStop();
-        System.out.println("dArmSoftStopSpeed = " + dArmSoftStopSpeed);
-        // objForearm.stopForearm();
-        dForearmSoftStopSpeed = objForearm.softStop();
-        System.out.println("dForearmSoftStopSpeed = " + dForearmSoftStopSpeed);
-        objWrist.stopWrist();
+        objArm.softStop();
+        objForearm.softStop();
+        objWrist.softStop();
         iCounter = iCounter + 1;
         if (iCounter > 15) iState = 20; // cone has flipped, now proceed to the three target angles
         System.out.println("Score Cone Top 2 State 11:  " + iCounter);
         break;
       case 20:  // proceed to the three target angles
         System.out.println("State 20");
-        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 1.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
+        // if all wrist joint is at correct angle then iState = 99;
+        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;
+        break;
+      case 99:
+        objArm.softStop();
+        objForearm.softStop();
+        objWrist.softStop();
         break;
     }
   }
@@ -113,7 +117,7 @@ public class ScoreConeTop2 extends CommandBase {
   public void end(boolean interrupted) {
     objArm.stopArm();
     objForearm.stopForearm();
-    objWrist.stopWrist();
+    objWrist.stopWrist();    
   }
 
   // Returns true when the command should end.

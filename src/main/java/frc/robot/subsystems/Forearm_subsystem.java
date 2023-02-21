@@ -49,16 +49,6 @@ public class Forearm_subsystem extends SubsystemBase {
     objForearmMotor.stopMotor();
   }
 
-  public double getForearmAngle() {
-    double dForearmAngle;
-    dForearmAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Forearm.dOffset, 1.0, false);
-
-    SmartDashboard.putNumber("Raw Forearm Encoder", objAbsEncoder.get());
-    SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
-    
-    return dForearmAngle;
-  }
-
   public double softStop() {
     dSpeed = objForearmMotor.get();
     if (dSpeed > 0.0) {
@@ -69,6 +59,16 @@ public class Forearm_subsystem extends SubsystemBase {
     }
     objForearmMotor.set(dSpeed);
     return Math.abs(dSpeed);
+  }
+
+  public double getForearmAngle() {
+    double dForearmAngle;
+    dForearmAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Forearm.dOffset, 1.0, false);
+
+    SmartDashboard.putNumber("Raw Forearm Encoder", objAbsEncoder.get());
+    SmartDashboard.putNumber("Forearm Angle", dForearmAngle);
+    
+    return dForearmAngle;
   }
 
   public double moveForearmToAngle(double dTargetAngle, double dAngle_old, double dCommand_old, double dSpeedMult) {
