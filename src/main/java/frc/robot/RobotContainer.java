@@ -145,20 +145,33 @@ public class RobotContainer {
     
     
     /* ButtonBox Stuff */
-    // ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
 
-    ButtonOne.whileTrue(new Pickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonTwo.whileTrue(new ScoreConeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    // ButtonTwo.whileTrue(new Mech_cmd_group(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonThree.whileTrue(new ScoreCubeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonFour.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    // ButtonOne.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+
+    // Left Side of Button box (Top to Bottom)
+    ButtonFour.whileTrue(new ScoreCubeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonFive.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonSix.whileTrue(new Pickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+
+    // Right Side of Button box (Top to Bottom)    
+    ButtonOne.whileTrue(new ScoreConeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem)); 
+    ButtonTwo.whileTrue(new ScoreConeMiddle2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonThree.whileTrue(new Pickup2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+
+    
+
+    // Middle buttons (Top and Bottom)    
     ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
+    
+    // Currently Unused Buttons
+    // ButtonSix.whileTrue(new ScoreCubeMiddle(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonSix.whileTrue(new ScoreBottom(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonOne.onTrue(objSignalLights_subsystem.changeLightColor());
 
 
+    // Currently Working on this button
 
-
+    // 
 
 
 
