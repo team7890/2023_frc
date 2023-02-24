@@ -23,6 +23,7 @@ public class Wrist_subsystem extends SubsystemBase {
   private CANSparkMax objWristMotor = new CANSparkMax(Constants.canIDs.iWristMotor,MotorType.kBrushless);
   private DutyCycleEncoder objAbsEncoder;
   private double dSpeed;
+  private boolean bSoftStopActive;
 
   /** Creates a new Wrist_subsystem. */
   public Wrist_subsystem() {
@@ -41,7 +42,14 @@ public class Wrist_subsystem extends SubsystemBase {
     getWristAngle();
     double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
     SmartDashboard.putNumber("Test Result", testResult);
+    
+    if(bSoftStopActive) {
+      softStop();
+      if(Math.abs(objWristMotor.get()) < 0.03) setSoftStop(false);
+    }
   }
+
+  public void setSoftStop(boolean input) { bSoftStopActive = input; }
 
   public void moveWrist (double dSpeed) {
     double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
@@ -62,10 +70,13 @@ public class Wrist_subsystem extends SubsystemBase {
   public double softStop() {
     dSpeed = objWristMotor.get();
     if (dSpeed > 0.0) {
-      dSpeed = Math.max(dSpeed - Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed = Math.max(dSpeed - Constants.Arm.dSoftStopLimit, 0.0);
     }
     else {
-      dSpeed = Math.min(dSpeed + Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed = Math.min(dSpeed + Constants.Arm.dSoftStopLimit, 0.0);
+    }
+    if(Math.abs(dSpeed) < 0.035) {
+      dSpeed = 0.0;
     }
     objWristMotor.set(dSpeed);
     return Math.abs(dSpeed);

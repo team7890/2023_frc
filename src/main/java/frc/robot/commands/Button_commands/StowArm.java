@@ -49,15 +49,15 @@ public class StowArm extends CommandBase {
   @Override
   public void initialize() {
     //Arm Variables
-    objArm.stopArm();
+    objArm.setSoftStop(false);
     dArmAngle_old = objArm.getArmAngle();
     dArmCommand_old = 0.0;
     //Forearm Variables
-    objForearm.stopForearm();
+    objForearm.setSoftStop(false);
     dForearmAngle_old = objForearm.getForearmAngle();
     dForearmCommand_old = 0.0;
     //Wrist Variables
-    objWrist.stopWrist();
+    objWrist.setSoftStop(false);
     dWristAngle_old = objWrist.getWristAngle();
     dWristCommand_old = 0.0;
 
@@ -90,7 +90,13 @@ public class StowArm extends CommandBase {
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
         if (objWrist.getWristAngle() > 20.0) iState = 13;
         break;
-      case 13:          // Move everything to stow targets
+      case 13:
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
+        objForearm.softStop();
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
+        if (objArm.getArmAngle() > -5.0) iState = 14;
+        break;
+      case 14:          // Move everything to stow targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
@@ -106,14 +112,15 @@ public class StowArm extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
+    System.out.println("Stow Arm State: " + iState);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objArm.stopArm();
-    objForearm.stopForearm();
-    objWrist.stopWrist();
+    objArm.setSoftStop(true);
+    objForearm.setSoftStop(true);
+    objWrist.setSoftStop(true);
   }
 
   // Returns true when the command should end.

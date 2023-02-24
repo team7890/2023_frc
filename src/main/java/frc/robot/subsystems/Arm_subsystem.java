@@ -24,6 +24,7 @@ public class Arm_subsystem extends SubsystemBase {
   private DutyCycleEncoder objAbsEncoder;
   private double dSpeed1;
   private double dSpeed2;
+  private boolean bSoftStopActive;
 
   /** Creates a new Arm_subsystem. */
   public Arm_subsystem() {
@@ -38,7 +39,13 @@ public class Arm_subsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     getArmAngle();
+    if(bSoftStopActive) {
+      softStop();
+      if(Math.abs(objArmMotor1.get()) < 0.03) setSoftStop(false);
+    }
   }
+
+  public void setSoftStop(boolean input) { bSoftStopActive = input; }
 
   public double moveArm(double dSpeed, double dSpeed_old) {
     double dSpeedLimit = Constants.Arm.dArmSpeedControlMax;
@@ -68,13 +75,18 @@ public class Arm_subsystem extends SubsystemBase {
     dSpeed1 = objArmMotor1.get();
     dSpeed2 = objArmMotor2.get();
     if (dSpeed1 > 0.0) {
-      dSpeed1 = Math.max(dSpeed1 - Constants.Arm.dSpeedUpLimit, 0.0);
-      dSpeed2 = Math.min(dSpeed2 + Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed1 = Math.max(dSpeed1 - Constants.Arm.dSoftStopLimit, 0.0);
+      dSpeed2 = Math.min(dSpeed2 + Constants.Arm.dSoftStopLimit, 0.0);
     }
     else {
-      dSpeed1 = Math.min(dSpeed1 + Constants.Arm.dSpeedUpLimit, 0.0);
-      dSpeed2 = Math.max(dSpeed2 - Constants.Arm.dSpeedUpLimit, 0.0);
+      dSpeed1 = Math.min(dSpeed1 + Constants.Arm.dSoftStopLimit, 0.0);
+      dSpeed2 = Math.max(dSpeed2 - Constants.Arm.dSoftStopLimit, 0.0);
     }
+    if(Math.abs(dSpeed1) < 0.035) {
+      dSpeed1 = 0.0;
+      dSpeed2 = 0.0;
+    }
+    System.out.println("Arm Subsys" + dSpeed1);
     objArmMotor1.set(dSpeed1);
     objArmMotor2.set(dSpeed2);
     return Math.abs(dSpeed1);

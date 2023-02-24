@@ -49,15 +49,15 @@ public class ScoreCubeMiddle extends CommandBase {
   @Override
   public void initialize() {
     //Arm Variables
-    objArm.stopArm();
+    objArm.setSoftStop(false);
     dArmAngle_old = objArm.getArmAngle();
     dArmCommand_old = 0.0;
     //Forearm Variables
-    objForearm.stopForearm();
+    objForearm.setSoftStop(false);
     dForearmAngle_old = objForearm.getForearmAngle();
     dForearmCommand_old = 0.0;
     //Wrist Variables
-    objWrist.stopWrist();
+    objWrist.setSoftStop(false);
     dWristAngle_old = objWrist.getWristAngle();
     dWristCommand_old = 0.0;
 
@@ -67,6 +67,7 @@ public class ScoreCubeMiddle extends CommandBase {
 
   }
 
+  // PARTS OF THIS DO NOT WORK AND MUST BE FIXED
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -83,13 +84,21 @@ public class ScoreCubeMiddle extends CommandBase {
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
         if (objForearm.getForearmAngle() < -20.0) iState = 12;
         break;
-      case 12:          // TODO : Comment case 12
+      case 12:          // This moves the forearm to the correct position, but it doesn't work. If the forearm angle is between -20 and -50 it
+                        // will either do nothing OR move the arm & wrist but not forearm. Needs testing & patching
         objArm.softStop();
         objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(dForearmTarget, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objForearm.getForearmAngle() < -50.0) iState = 13;
+        if (objForearm.getForearmAngle() < -50.0) iState = 14;
+        else iState = 13;
         break;
-      case 13:          // Move everything to stow targets
+      case 13: // Added this case to try and fix the error of the forearm not adjusting properly, didn't work. Needs testing
+        objArm.softStop();
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        dWristCommand_old = objWrist.moveWristToAngle(dForearmTarget, dWristAngle_old, dWristCommand_old, 3.0);
+        if (objForearm.getForearmAngle() < -50.0) iState = 14;
+        break;
+      case 14:          // Move everything to stow targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
@@ -110,9 +119,9 @@ public class ScoreCubeMiddle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objArm.stopArm();
-    objForearm.stopForearm();
-    objWrist.stopWrist();
+    objArm.setSoftStop(true);
+    objForearm.setSoftStop(true);
+    objWrist.setSoftStop(true);
   }
 
   // Returns true when the command should end.

@@ -58,7 +58,7 @@ public class Arm_command extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objArm_subsystem.stopArm();
+    objArm_subsystem.setSoftStop(true);
   }
 
   // Returns true when the command should end.

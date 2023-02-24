@@ -57,7 +57,7 @@ public class Wrist_command extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objWrist_subsystem.stopWrist();
+    objWrist_subsystem.setSoftStop(true);
   }
 
   // Returns true when the command should end.

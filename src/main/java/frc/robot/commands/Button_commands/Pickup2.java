@@ -49,15 +49,15 @@ public class Pickup2 extends CommandBase {
   @Override
   public void initialize() {
     //Arm Variables
-    objArm.stopArm();
+    objArm.setSoftStop(false);
     dArmAngle_old = objArm.getArmAngle();
     dArmCommand_old = 0.0;
     //Forearm Variables
-    objForearm.stopForearm();
+    objForearm.setSoftStop(false);
     dForearmAngle_old = objForearm.getForearmAngle();
     dForearmCommand_old = 0.0;
     //Wrist Variables
-    objWrist.stopWrist();
+    objWrist.setSoftStop(false);
     dWristAngle_old = objWrist.getWristAngle();
     dWristCommand_old = 0.0;
 
@@ -111,9 +111,9 @@ public class Pickup2 extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objArm.stopArm();
-    objForearm.stopForearm();
-    objWrist.stopWrist();
+    objArm.setSoftStop(true);
+    objForearm.setSoftStop(true);
+    objWrist.setSoftStop(true);
   }
 
   // Returns true when the command should end.

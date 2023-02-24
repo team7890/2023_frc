@@ -33,7 +33,8 @@ public class Forearm_command extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    objForearm_subsystem.stopForearm();
+    objForearm_subsystem.setSoftStop(false);
+    // objForearm_subsystem.stopForearm();
     dAngle_old = objForearm_subsystem.getForearmAngle();
     dCommand_old = 0.0;
     bDone = false;
@@ -60,7 +61,7 @@ public class Forearm_command extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objForearm_subsystem.stopForearm();
+    objForearm_subsystem.setSoftStop(true);
   }
 
   // Returns true when the command should end.
