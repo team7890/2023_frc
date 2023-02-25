@@ -36,9 +36,9 @@ public class Forearm_subsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     getForearmAngle();
-    if(bSoftStopActive) {
+    if (bSoftStopActive) {
       softStop();
-      if(Math.abs(objForearmMotor.get()) < 0.03) {
+      if (Math.abs(objForearmMotor.get()) < 0.03) {
         bSoftStopActive = false;
         bHoldPosition = true;
         dHoldAngle = getForearmAngle();
