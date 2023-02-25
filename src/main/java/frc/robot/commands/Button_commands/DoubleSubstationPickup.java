@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 
-public class Pickup2 extends CommandBase {
+public class DoubleSubstationPickup extends CommandBase {
 
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
@@ -28,14 +28,15 @@ public class Pickup2 extends CommandBase {
   private int iState;
   private double dArmSoftStopSpeed;
   private double dForearmSoftStopSpeed;
+  private double dWristSoftStopSpeed;
 
   // Final Target Positions
-  double dArmTarget = -12.9;
-  double dForearmTarget = -118.7;
-  double dWristTarget = -49.4;
+  double dArmTarget = -2.0;
+  double dForearmTarget = -54.0;
+  double dWristTarget = -91.6;
 
   /** Creates a new ScoreCubeTop. */
-  public Pickup2(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
+  public DoubleSubstationPickup(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
     objArm = objArm_in;
     objForearm = objForearm_in;
     objWrist = objWrist_in;
@@ -76,29 +77,32 @@ public class Pickup2 extends CommandBase {
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
         if (objWrist.getWristAngle() < -10.0) iState = 11;
         break;
-      case 11:
-        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 5.0);
-        if (objArm.getArmAngle() < 1.5) iState = 12;
-      case 12:          // then move the arm so that it doesnt stick out of the front of the robot (to 0.0 degrees)
+      case 11:          // then move the arm so that it doesnt stick out of the front of the robot (to 0.0 degrees)
                         // then move the forearm over the top so that its on the stowing side of the robot
-        objArm.softStop();
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.5);
+        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 2.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objForearm.getForearmAngle() < -20.0) iState = 13;
+        if (objForearm.getForearmAngle() < -20.0) iState = 12;
         break;
-      case 13:          // stop arm and forearm until the wrist is clear
-                        // once the forearm gets over the top (towards stow position) then move wrist to target
-        objArm.softStop();
+      case 12:          // TODO : Comment case 12
+        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objWrist.getWristAngle() < -20.0) iState = 14;
+        if (objForearm.getForearmAngle() < -50.0) iState = 13;
         break;
-      case 14:          // Move everything to stow targets
+      case 13:          // Move everything to stow targets        //TODO fix comment
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        objWrist.softStop();
+        // if Arm and Forearm joints are at correct angle then iState = 14;
+        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0) iState = 14;
+        break;
+      case 14:
+        objArm.softStop();
+        objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
-        // if all three joints are at correct angle then iState = 99;
-        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;
+        if (Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;
+        // if all wrist joint is at correct angle then iState = 99;
         break;
       case 99:
         objArm.softStop();
@@ -109,7 +113,6 @@ public class Pickup2 extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    System.out.println("Pickup2: state: " + iState);
   }
 
   // Called once the command ends or is interrupted.

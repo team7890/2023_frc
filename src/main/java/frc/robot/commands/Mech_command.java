@@ -47,17 +47,19 @@ public class Mech_command extends CommandBase {
   @Override
   public void initialize() {
     //Arm Variables
-    objArm.stopArm();
     dArmAngle_old = objArm.getArmAngle();
     dArmCommand_old = 0.0;
     //Forearm Variables
-    objForearm.stopForearm();
     dForearmAngle_old = objForearm.getForearmAngle();
     dForearmCommand_old = 0.0;
     //Wrist Variables
-    objWrist.stopWrist();
     dWristAngle_old = objWrist.getWristAngle();
     dWristCommand_old = 0.0;
+
+    // Softstop Stuff
+    objArm.setSoftStop(false);
+    objForearm.setSoftStop(false);
+    objWrist.setSoftStop(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -71,9 +73,9 @@ public class Mech_command extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    objArm.stopArm();
-    objForearm.stopForearm();
-    objWrist.stopWrist();
+    objArm.setSoftStop(true);
+    objForearm.setSoftStop(true);
+    objWrist.setSoftStop(true);
   }
 
   // Returns true when the command should end.

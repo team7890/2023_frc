@@ -94,10 +94,8 @@ public class ScoreConeTop2 extends CommandBase {
         objWrist.softStop();
         iCounter = iCounter + 1;
         if (iCounter > 15) iState = 20; // cone has flipped, now proceed to the three target angles
-        System.out.println("Score Cone Top 2 State 11:  " + iCounter);
         break;
       case 20:  // proceed to the three target angles
-        System.out.println("State 20");
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
