@@ -149,8 +149,9 @@ public class RobotContainer {
 
     // Left Side of Button box (Top to Bottom)
     ButtonFour.whileTrue(new ScoreCubeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonFive.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonSix.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonFive.whileTrue(new ScoreCubeMiddle(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonSix.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonSix.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
 
     // Right Side of Button box (Top to Bottom)    
     ButtonOne.whileTrue(new ScoreConeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem)); 
@@ -161,7 +162,7 @@ public class RobotContainer {
 
     // Middle buttons (Top and Bottom)    
     ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
-    ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
+    // ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
     
     // Currently Unused Buttons
     // ButtonSix.whileTrue(new ScoreCubeMiddle(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
@@ -177,30 +178,15 @@ public class RobotContainer {
 
 
 
-    
-
-    /* Testing New Command System */      //Looks Nice I Guess?
-    // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, , ,));
-
-    //Straight Up
-    // m_CoPilotController.rightTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
-    
-    //Pick Up Verticle Cone 
-    // m_CoPilotController.leftTrigger().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -9.1, -118.28, -47.69));
-
-    //Drop Cone on Top Cone Level
-    // m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 22.0, 27.0, 11.72));
-
-    //Cube to Middle from front
-    // m_CoPilotController.leftBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, -22.0, 114.0, 4.2));
-
-    //Cube to Top from front
-    // m_CoPilotController.rightBumper().whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 9.1, 70.6, -2.8));
+    // Open/ Close grabber
+    m_DriverController.a().debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
+    m_DriverController.rightBumper().whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // leftbumper will be slow mode
 
 
     /* Driver Buttons */    //For Swerve
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
-    m_DriverController.leftTrigger().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
+    m_DriverController.back().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
 
     // try with xbox controller but commented out when got button box above working
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
