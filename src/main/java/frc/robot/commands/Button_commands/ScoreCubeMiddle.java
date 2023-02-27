@@ -26,8 +26,7 @@ public class ScoreCubeMiddle extends CommandBase {
   private double dWristCommand_old;
 
   private int iState;
-  private double dArmSoftStopSpeed;
-  private double dForearmSoftStopSpeed;
+
 
   // Final Target Positions
   double dArmTarget = -9.8;

@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 
-public class Pickup2 extends CommandBase {
+public class GeneralPickup extends CommandBase {
 
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
@@ -26,16 +26,15 @@ public class Pickup2 extends CommandBase {
   private double dWristCommand_old;
 
   private int iState;
-  private double dArmSoftStopSpeed;
-  private double dForearmSoftStopSpeed;
+
 
   // Final Target Positions
-  double dArmTarget = -12.9;
-  double dForearmTarget = -118.7;
-  double dWristTarget = -49.4;
+  double dArmTarget = -4.5;
+  double dForearmTarget = -127.5;
+  double dWristTarget = -22.2;
 
   /** Creates a new ScoreCubeTop. */
-  public Pickup2(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
+  public GeneralPickup(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
     objArm = objArm_in;
     objForearm = objForearm_in;
     objWrist = objWrist_in;

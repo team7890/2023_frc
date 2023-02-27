@@ -156,7 +156,7 @@ public class RobotContainer {
     // Right Side of Button box (Top to Bottom)    
     ButtonOne.whileTrue(new ScoreConeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem)); 
     ButtonTwo.whileTrue(new ScoreConeMiddle2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonThree.whileTrue(new Pickup2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonThree.whileTrue(new PickupVeritcleCone(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
 
     
 

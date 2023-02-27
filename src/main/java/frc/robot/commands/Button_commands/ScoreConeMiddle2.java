@@ -26,9 +26,7 @@ public class ScoreConeMiddle2 extends CommandBase {
   private double dWristCommand_old;
 
   private int iState;
-  private double dArmSoftStopSpeed;
-  private double dForearmSoftStopSpeed;
-  private double dWristSoftStopSpeed;
+
 
   // Final Target Positions
   double dArmTarget = -22.0;

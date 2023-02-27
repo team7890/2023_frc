@@ -4,16 +4,18 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-// import frc.robot.CTREConfigs;
 
 public class SwerveModule {
     public int moduleNumber;
@@ -23,6 +25,8 @@ public class SwerveModule {
     private TalonFX mAngleMotor;
     private TalonFX mDriveMotor;
     private CANCoder angleEncoder;
+
+    public double CANcoderInitTime = 0.0;
 
     SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
@@ -44,6 +48,10 @@ public class SwerveModule {
 
         lastAngle = getState().angle;
     }
+    public void setBrakeMode(boolean brakeMode){
+        mAngleMotor.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
+        mDriveMotor.setNeutralMode(brakeMode ? NeutralMode.Brake : NeutralMode.Coast);
+    }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
@@ -51,7 +59,6 @@ public class SwerveModule {
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
     }
-
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
             double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
@@ -62,12 +69,17 @@ public class SwerveModule {
             mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
         }
     }
+    
+
+    public void enableBrakeMode(boolean enable) {
+        if (enable) {
+            mDriveMotor.setNeutralMode(NeutralMode.Brake);
+        } else {
+            mDriveMotor.setNeutralMode(NeutralMode.Coast);
+        }
+    }
 
     private void setAngle(SwerveModuleState desiredState){
-        // Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
-        // mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-        // lastAngle = angle;
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         Rotation2d oldAngle = getAngle();
         angle = optimizeTurn(oldAngle, angle);  
@@ -75,6 +87,32 @@ public class SwerveModule {
         lastAngle = angle;
     }
 
+    private Rotation2d getAngle(){
+        return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
+    }
+
+    public Rotation2d getCanCoder(){
+        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+    }
+
+    private void waitForCanCoder(){
+        /*
+         * Wait for up to 1000 ms for a good CANcoder signal.
+         *
+         * This prevents a race condition during program startup
+         * where we try to synchronize the Falcon encoder to the
+         * CANcoder before we have received any position signal
+         * from the CANcoder.
+         */
+        for (int i = 0; i < 100; ++i) {
+            angleEncoder.getAbsolutePosition();
+            if (angleEncoder.getLastError() == ErrorCode.OK) {
+                break;
+            }
+            Timer.delay(0.010);            
+            CANcoderInitTime += 10;
+        }
+    }
     // https://www.chiefdelphi.com/t/5013-the-trobots-2023-charged-up-open-alliance-build-thread/419112/37
     public double makePositiveDegrees(double anAngle) {
         double degrees = anAngle;
@@ -116,22 +154,11 @@ public class SwerveModule {
         return Rotation2d.fromDegrees(makePositiveDegrees(steerAngle));
     }
 
-    private Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
-    }
-
-    public Rotation2d getCanCoder(){
-        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
-    }
-
-    public double getAngleEncoder(){
-        return angleEncoder.getAbsolutePosition();
-    }
-
     public void resetToAbsolute(){
-        double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
+        //waitForCanCoder();
+
+        double absolutePosition = Conversions.degreesToFalcon(makePositiveDegrees(getCanCoder().getDegrees() - angleOffset.getDegrees()), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
-        // SmartDashboard.getNumber("Falcon Angle", absolutePosition);
     }
 
     private void configAngleEncoder(){        
@@ -144,6 +171,7 @@ public class SwerveModule {
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
+        //Timer.delay(1);
         resetToAbsolute();
     }
 
@@ -167,5 +195,8 @@ public class SwerveModule {
             Conversions.falconToMeters(mDriveMotor.getSelectedSensorPosition(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio), 
             getAngle()
         );
+    }
+    public double getDistanceMeters(){
+        return Conversions.falconToMeters(mDriveMotor.getSelectedSensorPosition(), Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
     }
 }
