@@ -108,7 +108,7 @@ public class GeneralPickup extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    System.out.println("Pickup2: state: " + iState);
+    // System.out.println("GeneralPickup - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.

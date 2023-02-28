@@ -70,29 +70,26 @@ public class PickupVeritcleCone extends CommandBase {
   @Override
   public void execute() {
     switch (iState) {
-      case 10:          //if the forearm is out on the high scoring side
-                        // first move the wirst up (means the wrist is going to a negative angle)
+      case 10:          //if the forearm is out on the high scoring side first move the wirst up
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
         if (objWrist.getWristAngle() < -10.0) iState = 11;
         break;
-      case 11:
-        dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 5.0);
+      case 11:          // then move the arm so that it doesnt stick out of the front of the robot (Arm target is in robot)
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 5.0);
         if (objArm.getArmAngle() < 1.5) iState = 12;
-      case 12:          // then move the arm so that it doesnt stick out of the front of the robot (to 0.0 degrees)
-                        // then move the forearm over the top so that its on the stowing side of the robot
+      case 12:          // then move the forearm over the top so that its on the stowing side of the robot
         objArm.softStop();
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
         if (objForearm.getForearmAngle() < -20.0) iState = 13;
         break;
-      case 13:          // stop arm and forearm until the wrist is clear
-                        // once the forearm gets over the top (towards stow position) then move wrist to target
+      case 13:          // once the forearm gets over the top (towards stow position) then move wrist to target
         objArm.softStop();
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
         if (objWrist.getWristAngle() < -20.0) iState = 14;
         break;
-      case 14:          // Move everything to stow targets
+      case 14:          // Move everything to "Pickup Verticle Cone" targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
@@ -108,7 +105,7 @@ public class PickupVeritcleCone extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    System.out.println("Pickup2: state: " + iState);
+    // System.out.println("PickupVerticleCone - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.

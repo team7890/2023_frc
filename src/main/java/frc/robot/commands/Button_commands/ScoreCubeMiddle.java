@@ -71,8 +71,7 @@ public class ScoreCubeMiddle extends CommandBase {
   @Override
   public void execute() {
     switch (iState) {
-      case 10:          //if the forearm is out on the high scoring side
-                        // first move the wirst up (means the wrist is going to a negative angle)
+      case 10:          //if the forearm is out on the high scoring side first move the wirst up
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 4.0);
         if (objWrist.getWristAngle() < -10.0) iState = 11;
         break;
@@ -113,6 +112,7 @@ public class ScoreCubeMiddle extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
+    // System.out.println("ScoreCubeMiddle - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.
