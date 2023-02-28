@@ -43,7 +43,7 @@ public class RobotContainer {
   private final Arm_subsystem objArm_subsystem = new Arm_subsystem();
   private final Forearm_subsystem objForearm_subsystem = new Forearm_subsystem();
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
-  private final SignalLights_subsystem objSignalLights_subsystem = new SignalLights_subsystem();
+  // private final SignalLights_subsystem objSignalLights_subsystem = new SignalLights_subsystem();
   private final Grabber_subsystem objGrabber_subsystem = new Grabber_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -148,7 +148,7 @@ public class RobotContainer {
 
 
     // Left Side of Button box (Top to Bottom)
-    ButtonFour.whileTrue(new ScoreCubeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonFour.whileTrue(new ScoreCubeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));    //Testing new version of ScoreCubeTop
     ButtonFive.whileTrue(new ScoreCubeMiddle(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     ButtonSix.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // ButtonSix.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
