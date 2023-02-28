@@ -114,11 +114,10 @@ public class StowArm extends CommandBase {
         objWrist.softStop();
         break;
     }
-    System.out.println("StowArm case: " + iState);
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    System.out.println("Stow Arm State: " + iState);
+    // System.out.println("StowArm - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.

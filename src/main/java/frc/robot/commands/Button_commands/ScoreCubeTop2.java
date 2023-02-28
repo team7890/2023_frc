@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 
-public class GeneralPickup extends CommandBase {
+public class ScoreCubeTop2 extends CommandBase {
 
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
@@ -27,14 +27,13 @@ public class GeneralPickup extends CommandBase {
 
   private int iState;
 
-
   // Final Target Positions
-  double dArmTarget = -4.5;
-  double dForearmTarget = -127.5;
-  double dWristTarget = -22.2;
+  double dArmTarget = 9.9;
+  double dForearmTarget = 62.1;
+  double dWristTarget = 8.5;
 
   /** Creates a new ScoreCubeTop. */
-  public GeneralPickup(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
+  public ScoreCubeTop2(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
     objArm = objArm_in;
     objForearm = objForearm_in;
     objWrist = objWrist_in;
@@ -63,17 +62,33 @@ public class GeneralPickup extends CommandBase {
     iState = 0;
     if (objForearm.getForearmAngle() > -20.0) iState = 10;
     else iState = 12;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // if (objForearm.getForearmAngle() < 30.0) {
+    //   dArmCommand_old = objArm.moveArmToAngle(-5.0, dArmAngle_old, dArmCommand_old, 2.0);
+    //   dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+    //   if (objWrist.getWristAngle() > 0.0) {
+    //     dWristCommand_old = objWrist.moveWristToAngle(35.0, dWristAngle_old, dWristCommand_old, 1.0);
+    //   }
+    //   else {
+    //     dWristCommand_old = objWrist.moveWristToAngle(-35.0, dWristAngle_old, dWristCommand_old, 1.0);
+    //   }
+    // }
+    // else {
+    //   dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
+    //   dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
+    //   dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
+    // }
+    // dArmAngle_old = objArm.getArmAngle();
+    // dForearmAngle_old = objForearm.getForearmAngle();
+    // dWristAngle_old = objWrist.getWristAngle();
     switch (iState) {
-      case 10:          //if the forearm is out on the high scoring side
-                        // first move the wirst up (means the wrist is going to a negative angle)
-        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
-        if (objWrist.getWristAngle() < -10.0) iState = 11;
+      case 10:          //if the forearm is out on the high scoring side first move the wirst up
+        dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 2.0);
+        if (objWrist.getWristAngle() < 10.0) iState = 11;
         break;
       case 11:
         dArmCommand_old = objArm.moveArmToAngle(0.0, dArmAngle_old, dArmCommand_old, 5.0);
@@ -81,16 +96,16 @@ public class GeneralPickup extends CommandBase {
       case 12:          // then move the arm so that it doesnt stick out of the front of the robot (to 0.0 degrees)
                         // then move the forearm over the top so that its on the stowing side of the robot
         objArm.softStop();
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.5);
-        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objForearm.getForearmAngle() < -20.0) iState = 13;
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 3.0);
+        if (objForearm.getForearmAngle() >= 20.0) iState = 13;
         break;
       case 13:          // stop arm and forearm until the wrist is clear
                         // once the forearm gets over the top (towards stow position) then move wrist to target
         objArm.softStop();
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objWrist.getWristAngle() < -20.0) iState = 14;
+        if (objWrist.getWristAngle() < 20.0) iState = 14;
         break;
       case 14:          // Move everything to stow targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
@@ -108,7 +123,7 @@ public class GeneralPickup extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    // System.out.println("GeneralPickup - state: " + iState);     //For Testing
+    // System.out.println("ScoreCubeTop - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.

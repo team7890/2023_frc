@@ -82,15 +82,15 @@ public class STEAL extends CommandBase {
                         // then move the forearm over the top so that its on the stowing side of the robot
         objArm.softStop();
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
-        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objForearm.getForearmAngle() < -20.0) iState = 13;
+        dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 3.0);
+        if (objForearm.getForearmAngle() >= 20.0) iState = 13;
         break;
       case 13:          // stop arm and forearm until the wrist is clear
                         // once the forearm gets over the top (towards stow position) then move wrist to target
         objArm.softStop();
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objWrist.getWristAngle() < -20.0) iState = 14;
+        if (objWrist.getWristAngle() < 20.0) iState = 14;
         break;
       case 14:          // Move everything to stow targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
@@ -108,7 +108,7 @@ public class STEAL extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    System.out.println("Pickup2: state: " + iState);
+    // System.out.println("STEAL - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.
