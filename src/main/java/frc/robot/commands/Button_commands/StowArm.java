@@ -87,7 +87,13 @@ public class StowArm extends CommandBase {
         objArm.softStop();
         objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.5);
-        if (objWrist.getWristAngle() > 20.0) iState = 13;
+        if (objWrist.getWristAngle() > 20.0) iState = 22;
+        break;
+      case 22: 
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 1.0);
+        objForearm.softStop();
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.5);
+        if (objArm.getArmAngle() > -12.5) iState = 13;
         break;
       case 13:
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 7.0);
