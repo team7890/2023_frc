@@ -131,6 +131,12 @@ public class Forearm_subsystem extends SubsystemBase {
     // if(Math.abs(dDifference) < 0.75) dCommand = 0.0;
 
     double dCommand = dDifference * (Constants.Forearm.kP * 0.6);
+    if (dCurrentAngle > 25.0) {
+      dCommand = dCommand - 0.025;
+    }
+    if (dCurrentAngle < -25.0) {
+      dCommand = dCommand + 0.025;
+    }
 
     dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     // if (Math.abs(dCommand) > Math.abs(dCommand_old)) {      //Checking that speed is increasing

@@ -86,7 +86,7 @@ public class ScoreConeTop3 extends CommandBase {
     // dForearmAngle_old = objForearm.getForearmAngle();
     // dWristAngle_old = objWrist.getWristAngle();
     switch (iState) {
-      case 10:          //if the forearm is out on the high scoring side first move the wirst up
+      case 10:          //if the forearm is out on the pickup side first move the wirst up
         dWristCommand_old = objWrist.moveWristToAngle(90.0, dWristAngle_old, dWristCommand_old, 2.0);
         if (objWrist.getWristAngle() < 10.0) iState = 11;
         break;
@@ -122,7 +122,7 @@ public class ScoreConeTop3 extends CommandBase {
     dArmAngle_old = objArm.getArmAngle();
     dForearmAngle_old = objForearm.getForearmAngle();
     dWristAngle_old = objWrist.getWristAngle();
-    // System.out.println("ScoreConeTop3 - state: " + iState);     //For Testing
+    System.out.println("ScoreConeTop3 - state: " + iState);     //For Testing
   }
 
   // Called once the command ends or is interrupted.

@@ -24,6 +24,8 @@ public class Wrist_subsystem extends SubsystemBase {
   private DutyCycleEncoder objAbsEncoder;
   private double dSpeed;
   private boolean bSoftStopActive;
+  private boolean bHoldPosition;
+  private double dHoldAngle;
 
   /** Creates a new Wrist_subsystem. */
   public Wrist_subsystem() {
@@ -39,18 +41,29 @@ public class Wrist_subsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    getWristAngle();
-    double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
-    SmartDashboard.putNumber("Test Result", testResult);
+    // getWristAngle();
+    // double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
+    // SmartDashboard.putNumber("Test Result", testResult);
     
     if(bSoftStopActive) {
       softStop();
-      if(Math.abs(objWristMotor.get()) < 0.03) setSoftStop(false);
+      if (Math.abs(objWristMotor.get()) < 0.03) {
+        bSoftStopActive = false;
+        bHoldPosition = true;
+        dHoldAngle = getWristAngle();
+      }
     }
+
+    if(bHoldPosition) {
+      holdPosition(dHoldAngle, 1.0);
+    } 
   }
 
-  public void setSoftStop(boolean input) { bSoftStopActive = input; }
-
+  public void setSoftStop(boolean input) { 
+    bSoftStopActive = input; 
+    bHoldPosition = false;
+  }
+  
   public void moveWrist (double dSpeed) {
     double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
     double dCurrentAngle = getWristAngle();
@@ -117,5 +130,14 @@ public class Wrist_subsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Wrist Arrived", bArrived);
     SmartDashboard.putNumber("WristControlSpeed", dCommand);
     return dCommand;
+  }
+
+  public void holdPosition(double dTargetAngle, double dSpeedMult) {
+    double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
+    double dCurrentAngle = getWristAngle();
+    double dDifference = dTargetAngle - dCurrentAngle; 
+    double dCommand = dDifference * (Constants.Wrist.kP * 0.6);
+    dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
+    moveWrist(dCommand);
   }
 }

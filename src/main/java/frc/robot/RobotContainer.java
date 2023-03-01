@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants;
+import frc.robot.Constants.Wrist;
 // import frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,14 +23,19 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 //Already Imported: import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.command_groups.*;
 import frc.robot.commands.*;
+import frc.robot.commands.Autonomous.AutoScoreConeTop;
 import frc.robot.commands.Button_commands.*;
 import frc.robot.subsystems.*;
 //End of Swerve Imports
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -78,6 +84,9 @@ public class RobotContainer {
   /* Subsystems */
   private final Swerve_subsystem s_Swerve = new Swerve_subsystem();
 
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final SequentialCommandGroup m_simpleAuto = new AutoScoreConeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //Swerve Stuff
@@ -108,6 +117,10 @@ public class RobotContainer {
     
     // Configure the trigger bindings
     configureBindings();
+
+    m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    // m_chooser.addOption("Complex Auto", m_complexAuto);
+    Shuffleboard.getTab("Autonomous").add(m_chooser);
   }
 
   /**
@@ -150,7 +163,9 @@ public class RobotContainer {
     // Left Side of Button box (Top to Bottom)
     ButtonFour.whileTrue(new ScoreCubeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));    //Testing new version of ScoreCubeTop
     ButtonFive.whileTrue(new ScoreCubeMiddle(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    ButtonSix.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonSix.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonSix.whileTrue(new GeneralPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+
     // ButtonSix.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
 
     // Right Side of Button box (Top to Bottom)    
@@ -202,7 +217,22 @@ public class RobotContainer {
     //   // return Autos.exampleAuto(m_exampleSubsystem);
   
     // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
+
+    // return new AutoScoreConeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem);
+
+    return m_chooser.getSelected();
+
+
+
+
+
+
+
+
+
+
+
+    // return new exampleAuto(s_Swerve);
   }
 
   

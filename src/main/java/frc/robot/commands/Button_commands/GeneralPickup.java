@@ -29,9 +29,9 @@ public class GeneralPickup extends CommandBase {
 
 
   // Final Target Positions
-  double dArmTarget = -4.5;
-  double dForearmTarget = -127.5;
-  double dWristTarget = -22.2;
+  double dArmTarget = -21.0;
+  double dForearmTarget = -114.5;
+  double dWristTarget = -42.5;
 
   /** Creates a new ScoreCubeTop. */
   public GeneralPickup(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {

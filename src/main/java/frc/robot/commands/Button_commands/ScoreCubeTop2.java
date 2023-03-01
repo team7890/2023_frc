@@ -60,7 +60,7 @@ public class ScoreCubeTop2 extends CommandBase {
     dWristCommand_old = 0.0;
 
     iState = 0;
-    if (objForearm.getForearmAngle() > -20.0) iState = 10;
+    if (objForearm.getForearmAngle() < 20.0) iState = 10;
     else iState = 12;
   }
 

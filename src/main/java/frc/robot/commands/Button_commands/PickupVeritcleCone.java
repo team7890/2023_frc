@@ -79,7 +79,7 @@ public class PickupVeritcleCone extends CommandBase {
         if (objArm.getArmAngle() < 1.5) iState = 12;
       case 12:          // then move the forearm over the top so that its on the stowing side of the robot
         objArm.softStop();
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 5.0);
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
         if (objForearm.getForearmAngle() < -20.0) iState = 13;
         break;
@@ -91,7 +91,7 @@ public class PickupVeritcleCone extends CommandBase {
         break;
       case 14:          // Move everything to "Pickup Verticle Cone" targets
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 2.0);
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 2.0);
         // if all three joints are at correct angle then iState = 99;
         if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;

@@ -86,7 +86,6 @@ public class Arm_subsystem extends SubsystemBase {
       dSpeed1 = 0.0;
       dSpeed2 = 0.0;
     }
-    System.out.println("Arm Subsys" + dSpeed1);
     objArmMotor1.set(dSpeed1);
     objArmMotor2.set(dSpeed2);
     return Math.abs(dSpeed1);
