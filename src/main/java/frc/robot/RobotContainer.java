@@ -205,6 +205,9 @@ public class RobotContainer {
 
     // try with xbox controller but commented out when got button box above working
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
+
+    // added to test autos with button because getAutoCmd was not working
+    // m_DriverController.start().whileTrue(new AutoScoreConeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem));
   }
 
   /**
@@ -223,9 +226,10 @@ public class RobotContainer {
     return m_chooser.getSelected();
 
 
+
     // return new exampleAuto(s_Swerve);
   }
 
-  
+
   
 }

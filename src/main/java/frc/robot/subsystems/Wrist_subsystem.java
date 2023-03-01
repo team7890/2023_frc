@@ -41,7 +41,7 @@ public class Wrist_subsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // getWristAngle();
+    getWristAngle();
     // double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
     // SmartDashboard.putNumber("Test Result", testResult);
     
