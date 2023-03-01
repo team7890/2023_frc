@@ -30,7 +30,7 @@ public class ScoreConeTop2 extends CommandBase {
 
 
   // Final Target Positions
-  double dArmTarget = 22.0;
+  double dArmTarget = 25.0;
   double dForearmTarget = 29.5;
   double dWristTarget = 0.0;
 

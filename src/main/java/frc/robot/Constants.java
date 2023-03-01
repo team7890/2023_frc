@@ -50,7 +50,7 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double dSpeedUpLimit = 0.005;
     public static final double dSoftStopLimit = 0.035;
-    public static final double dMaxAngleLimit = 22.0;
+    public static final double dMaxAngleLimit = 25.0;
     public static final double dMinAngleLimit = -22.0;
     public static final double dTolerance = 1.0;                      
   }
@@ -77,7 +77,7 @@ public final class Constants {
     public static final int iDIOPort = 2;
     // public static final double dDegreesPerRev = 360.0 / 42.0 * 18.0;
     // public static final double dOffset = -97.58;                          //Sets 0.0 to Straight up
-    public static final double dOffset = 0.5;
+    public static final double dOffset = -41.4;
     public static final double dSpeedControlMax = 0.2;
     public static final double kP = 0.03;
     public static final double kD = 0.01;
