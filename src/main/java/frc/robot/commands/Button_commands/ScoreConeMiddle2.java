@@ -61,7 +61,7 @@ public class ScoreConeMiddle2 extends CommandBase {
 
     iState = 0;
     if (objForearm.getForearmAngle() > -20.0) iState = 10;
-    else iState = 13;
+    else iState = 22;
 
   }
 
@@ -91,7 +91,7 @@ public class ScoreConeMiddle2 extends CommandBase {
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
         dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 5.0);
-        if (objForearm.getForearmAngle() < -30.0) iState = 33;
+        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 ) iState = 33;
         break;
       case 33:
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
