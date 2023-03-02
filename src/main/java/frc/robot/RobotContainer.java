@@ -30,7 +30,7 @@ import frc.robot.autos.*;
 import frc.robot.command_groups.*;
 import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.AutoScoreConeTop;
-import frc.robot.commands.Autonomous.AutoScoreConeTopAndMove;
+import frc.robot.commands.Autonomous.ScoreConeTopMoveShort;
 import frc.robot.commands.Button_commands.*;
 import frc.robot.subsystems.*;
 //End of Swerve Imports
@@ -208,7 +208,7 @@ public class RobotContainer {
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
 
     // added to test autos with button because getAutoCmd was not working
-    m_DriverController.start().whileTrue(new AutoScoreConeTopAndMove(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve));
+    m_DriverController.start().whileTrue(new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve));
   }
 
   /**
@@ -222,9 +222,9 @@ public class RobotContainer {
   
     // An ExampleCommand will run in autonomous
 
-    // return new AutoScoreConeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem);
+    return new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve);
 
-    return m_chooser.getSelected();
+    // return m_chooser.getSelected();
 
 
 

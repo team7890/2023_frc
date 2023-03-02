@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 // import java.lang.Math;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Utilities;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class Wrist_subsystem extends SubsystemBase {
@@ -26,37 +27,78 @@ public class Wrist_subsystem extends SubsystemBase {
   private boolean bSoftStopActive;
   private boolean bHoldPosition;
   private double dHoldAngle;
+  private DigitalInput objNegativeSide;    // For offset reset with limit switches
+  private DigitalInput objPositiveSide;    // For offset reset with limit switches
+  private double dOffset;
+  private double dOffsetLive;
+  private boolean bNegOld;
+  private boolean bPosOld;
+  private boolean bNeg;
+  private boolean bPos;
+  private double dAngle;
+  private double dAngleNegSwitch = -131.9;
+  private double dAnglePosSwitch = 125.8;
+
 
   /** Creates a new Wrist_subsystem. */
   public Wrist_subsystem() {
     objWristMotor.setIdleMode(IdleMode.kBrake);
     objWristMotor.setSmartCurrentLimit(Constants.Wrist.iCurrentLimit);
     objAbsEncoder = new DutyCycleEncoder(Constants.Wrist.iDIOPort);
+    objNegativeSide = new DigitalInput(3);
+    objPositiveSide = new DigitalInput(4);
+    dOffsetLive = 0.0;
+
     // objAbsEncoder.setDistancePerRotation(Constants.Wrist.dDegreesPerRev);
     SmartDashboard.putNumber("Test Encoder", 0.0);
     SmartDashboard.putNumber("Test Offset", 0.0);
     SmartDashboard.putNumber("Test DegRev", 0.0);
+
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     getWristAngle();
+    dAngle = getWristAngle();
+    bPos = !objPositiveSide.get();
+    bNeg = !objNegativeSide.get();
     // double testResult = Utilities.correctAngle(SmartDashboard.getNumber("Test Encoder", 0.0), SmartDashboard.getNumber("Test Offset", 0.0), SmartDashboard.getNumber("Test DegRev", 0.0));
     // SmartDashboard.putNumber("Test Result", testResult);
     
-    if(bSoftStopActive) {
+    if (bSoftStopActive) {
       softStop();
       if (Math.abs(objWristMotor.get()) < 0.03) {
         bSoftStopActive = false;
         bHoldPosition = true;
-        dHoldAngle = getWristAngle();
+        dHoldAngle = dAngle;
       }
     }
 
-    if(bHoldPosition) {
+    if (bHoldPosition) {
       holdPosition(dHoldAngle, 1.0);
     } 
+
+    if (!bNeg && bNegOld) {
+      if (Math.abs(dAngle - dAngleNegSwitch) > 5.0) {
+        dOffsetLive = dAngleNegSwitch - dAngle;
+        dHoldAngle = getWristAngle();
+      }
+    }
+    bNegOld = bNeg;
+
+    if (!bPos && bPosOld) {
+      if (Math.abs(dAngle - dAnglePosSwitch) > 5.0) {
+        dOffsetLive = dAngle - dAnglePosSwitch;
+        dHoldAngle = getWristAngle();
+      }
+    }
+    bPosOld = bPos;
+
+    SmartDashboard.putBoolean( "Positive", objPositiveSide.get());
+    SmartDashboard.putBoolean( "Negative", objNegativeSide.get());
+    SmartDashboard.putNumber("live Offset", dOffsetLive);
   }
 
   public void setSoftStop(boolean input) { 
@@ -67,10 +109,10 @@ public class Wrist_subsystem extends SubsystemBase {
   public void moveWrist (double dSpeed) {
     double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
     double dCurrentAngle = getWristAngle();
-    if (dCurrentAngle > Constants.Wrist.dMaxAngleLimit) {
+    if (dCurrentAngle > Constants.Wrist.dMaxAngleLimit || !objPositiveSide.get()) {
       dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
     }
-    else if (dCurrentAngle < Constants.Wrist.dMinAngleLimit) {
+    else if (dCurrentAngle < Constants.Wrist.dMinAngleLimit || !objNegativeSide.get()) {
       dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
     }
     objWristMotor.set(dSpeed);
@@ -99,7 +141,8 @@ public class Wrist_subsystem extends SubsystemBase {
     double dWristAngle;
     // apply - here if + motor speed results in a decreasing angle (make it dWristAngle = -Utilities.correct...)
     // dWristAngle = -Utilities.correctAngle(objAbsEncoder.get(), Constants.Wrist.dOffset, Constants.Wrist.dDegreesPerRev);
-    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get(), Constants.Wrist.dOffset, 42.0 / 18.0, true);
+    dOffset = Constants.Wrist.dOffset + dOffsetLive;
+    dWristAngle = Utilities.correctAngle2(objAbsEncoder.get(), dOffset, 42.0 / 18.0, true);
 
     SmartDashboard.putNumber("Raw Wrist Encoder", objAbsEncoder.get());
     SmartDashboard.putNumber("Wrist Angle", dWristAngle);
@@ -140,4 +183,12 @@ public class Wrist_subsystem extends SubsystemBase {
     dCommand = Utilities.limitVariable(-dSpeedLimit * dSpeedMult, dCommand, dSpeedLimit * dSpeedMult);
     moveWrist(dCommand);
   }
+
+  // public void resetOffsetNegative() {
+  //   dOffsetLive = 0.0;
+  // }
+
+  // public void resetOffsetPositive() {
+  //   dOffsetLive = 0.0;
+  // }
 }
