@@ -62,7 +62,6 @@ public class ScoreConeMiddle2 extends CommandBase {
     iState = 0;
     if (objForearm.getForearmAngle() > -20.0) iState = 10;
     else iState = 22;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -71,31 +70,37 @@ public class ScoreConeMiddle2 extends CommandBase {
     switch (iState) {
 
       case 10:    //if the forearm is out on the high scoring side first move the wirst up
-        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 2.0);
+        dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
         if (objWrist.getWristAngle() < -10.0) iState = 11;
         break;
       case 11:    // once Arm in within robot start Arm and Forearm to target keep wrist goint to -45.0 angle
-        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 5.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 3.0);
-        if (objForearm.getForearmAngle() < -20.0) iState = 13;    // Once forarm is past verticle swap to case 13
+        if (objForearm.getForearmAngle() < -20.0) iState = 21;    // Once forarm is past verticle swap to case 
         break;
-      case 13:    // Move everything to "Score Cone Middle" targets
-        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.5);
-        dWristCommand_old = objWrist.moveWristToAngle(-100.0, dWristAngle_old, dWristCommand_old, 3.0);
-        // if Arm and Forearm joints are at correct angle then iState = 14;
-        if (objForearm.getForearmAngle() < -30.0) iState = 22;
+      // case 13:    // Move everything to "Score Cone Middle" targets
+      //   dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
+      //   dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 0.5);
+      //   dWristCommand_old = objWrist.moveWristToAngle(-100.0, dWristAngle_old, dWristCommand_old, 5.0);
+      //   // if Arm and Forearm joints are at correct angle then iState = 14;
+      //   if (objForearm.getForearmAngle() < -30.0) iState = 21;
+      //   break;
+      case 21:
+        objArm.softStop();
+        objForearm.softStop();
+        dWristCommand_old = objWrist.moveWristToAngle(-100.0, dWristAngle_old, dWristCommand_old, 4.0);
+        if (objWrist.getWristAngle() < -90.0) iState = 22;
         break;
       case 22:
-        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 1.0);
+        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 5.0);
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 4.0);
         dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 5.0);
         if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 ) iState = 33;
         break;
       case 33:
-        dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 2.0);
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
+        objArm.softStop();
+        objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 3.0);
         if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;
         break;
