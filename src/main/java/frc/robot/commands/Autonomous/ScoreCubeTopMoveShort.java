@@ -14,8 +14,8 @@ import frc.robot.subsystems.Grabber_subsystem;
 import frc.robot.subsystems.Swerve_subsystem;
 
 import frc.robot.commands.Grabber_command;
-import frc.robot.commands.AutoSwerve;
-import frc.robot.commands.Button_commands.ScoreConeTop2;
+import frc.robot.commands.Swerve_balance;
+import frc.robot.commands.Button_commands.xScoreConeTop2;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -34,9 +34,9 @@ public class ScoreCubeTopMoveShort extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ScoreConeTop2(objArm, objForearm, objWrist).withTimeout(6.0),
+      new xScoreConeTop2(objArm, objForearm, objWrist).withTimeout(6.0),
       new Grabber_command(objGrabber).withTimeout(0.1),
-      new AutoSwerve(objSwerve, -0.2, 0.0, 0.0, false).withTimeout(2.0)
+      new Swerve_balance(objSwerve, -0.2, 0.0, 0.0, false).withTimeout(2.0)
     );
   }
 }

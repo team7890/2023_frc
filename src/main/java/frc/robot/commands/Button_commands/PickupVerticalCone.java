@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 
-public class PickupVeritcleCone extends CommandBase {
+public class PickupVerticalCone extends CommandBase {
 
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
@@ -31,10 +31,10 @@ public class PickupVeritcleCone extends CommandBase {
   // Final Target Positions
   double dArmTarget = -4.5;
   double dForearmTarget = -127.5;
-  double dWristTarget = -22.2;
+  double dWristTarget = -24.2;
 
   /** Creates a new ScoreCubeTop. */
-  public PickupVeritcleCone(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
+  public PickupVerticalCone(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
     objArm = objArm_in;
     objForearm = objForearm_in;
     objWrist = objWrist_in;

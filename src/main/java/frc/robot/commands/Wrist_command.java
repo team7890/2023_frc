@@ -31,7 +31,7 @@ public class Wrist_command extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    objWrist_subsystem.stopWrist();
+    objWrist_subsystem.setSoftStop(false);
     dAngle_old = objWrist_subsystem.getWristAngle();
     dCommand_old = 0.0;
     bDone = false;

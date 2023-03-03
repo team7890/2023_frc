@@ -26,7 +26,8 @@ public class Swerve_subsystem extends SubsystemBase {
     public Swerve_subsystem() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, "rio");       // Added "rio" network (bc it's wired on rio/pdh network)
         gyro.configFactoryDefault();
-        zeroGyro();
+        flipGyro();
+        // zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -102,6 +103,10 @@ public class Swerve_subsystem extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+    public void flipGyro(){
+        gyro.setYaw(180);
+    }
+
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
     }
@@ -112,10 +117,14 @@ public class Swerve_subsystem extends SubsystemBase {
         }
     }
 
-    public double getBalanceTilt() {
-        // double dRoll = gyro.getRoll();
+    public double getPitch() {
         double dPitch = gyro.getPitch();
         return dPitch;
+    }
+
+    public double getRoll() {
+        double dRoll = gyro.getRoll();
+        return dRoll;
     }
 
     @Override
@@ -126,5 +135,6 @@ public class Swerve_subsystem extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getDistanceMeters());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
         }
+        SmartDashboard.putNumber("Roll: ", getRoll());
     }
 }

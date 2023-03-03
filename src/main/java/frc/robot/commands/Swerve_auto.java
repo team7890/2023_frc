@@ -13,7 +13,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AutoSwerve extends CommandBase {
+public class Swerve_auto extends CommandBase {
   private Swerve_subsystem s_Swerve;
   private double dTrans;
   private double dStrafe;
@@ -21,7 +21,7 @@ public class AutoSwerve extends CommandBase {
   private boolean bRobotCentric;
 
   /** Creates a new AutoSwerve. */
-  public AutoSwerve(Swerve_subsystem s_Swerve_in, double dTrans_in, double dStrafe_in, double dRotate_in, boolean bRobotCentric_in) {
+  public Swerve_auto(Swerve_subsystem s_Swerve_in, double dTrans_in, double dStrafe_in, double dRotate_in, boolean bRobotCentric_in) {
     s_Swerve = s_Swerve_in;
     dTrans = dTrans_in;
     dStrafe = dStrafe_in;
@@ -40,14 +40,11 @@ public class AutoSwerve extends CommandBase {
   @Override
   public void execute() {
     /* Get Values, Deadband*/
-    double translationVal = MathUtil.applyDeadband(dTrans, Constants.stickDeadband);
-    double strafeVal = MathUtil.applyDeadband(dStrafe, Constants.stickDeadband);
-    double rotationVal = MathUtil.applyDeadband(dRotate, Constants.stickDeadband);
 
     /* Drive */
     s_Swerve.drive(
         new Translation2d(dTrans, dStrafe).times(Constants.Swerve.maxSpeed), 
-        rotationVal * Constants.Swerve.maxAngularVelocity, 
+        dRotate * Constants.Swerve.maxAngularVelocity, 
         !bRobotCentric, 
         true
     );
@@ -55,7 +52,15 @@ public class AutoSwerve extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+        /* Stop */
+        s_Swerve.drive(
+          new Translation2d(0.0, 0.0).times(Constants.Swerve.maxSpeed), 
+          0.0 * Constants.Swerve.maxAngularVelocity, 
+          !bRobotCentric, 
+          true
+      );
+  }
 
   // Returns true when the command should end.
   @Override

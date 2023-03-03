@@ -38,6 +38,7 @@ public class Wrist_subsystem extends SubsystemBase {
   private double dAngle;
   private double dAngleNegSwitch = -131.9;
   private double dAnglePosSwitch = 125.8;
+  private boolean bInitLimitSwitch;
 
 
   /** Creates a new Wrist_subsystem. */
@@ -54,7 +55,21 @@ public class Wrist_subsystem extends SubsystemBase {
     SmartDashboard.putNumber("Test Offset", 0.0);
     SmartDashboard.putNumber("Test DegRev", 0.0);
 
+    bInitLimitSwitch = false;
+    // init in case start with one or the other limit switches engaged
+    if (!objNegativeSide.get()) {
+      if (Math.abs(getWristAngle() - dAngleNegSwitch) > 5.0) {
+        dOffsetLive = dAngleNegSwitch - getWristAngle();
+        bInitLimitSwitch = true;
+      }
+    }
 
+    if (!objPositiveSide.get()) {
+      if (Math.abs(getWristAngle() - dAnglePosSwitch) > 5.0) {
+        dOffsetLive = getWristAngle() - dAnglePosSwitch;
+        bInitLimitSwitch = true;
+      }
+    }
   }
 
   @Override
@@ -80,21 +95,29 @@ public class Wrist_subsystem extends SubsystemBase {
       holdPosition(dHoldAngle, 1.0);
     } 
 
-    if (!bNeg && bNegOld) {
-      if (Math.abs(dAngle - dAngleNegSwitch) > 5.0) {
-        dOffsetLive = dAngleNegSwitch - dAngle;
-        dHoldAngle = getWristAngle();
-      }
+    // if start on a limit switch, constructor above corrects angle so don't do it the first time the limit switch turns off
+    if (bInitLimitSwitch) {
+      bInitLimitSwitch = false;
     }
-    bNegOld = bNeg;
+    else {    // every other time the limit switch turns off, recalibrate the angle
+      if (!bNeg && bNegOld) {
+        if (Math.abs(dAngle - dAngleNegSwitch) > 5.0) {
+          dOffsetLive = 0.0;
+          dOffsetLive = dAngleNegSwitch - getWristAngle();
+          dHoldAngle = getWristAngle();
+        }
+      }
+      bNegOld = bNeg;
 
-    if (!bPos && bPosOld) {
-      if (Math.abs(dAngle - dAnglePosSwitch) > 5.0) {
-        dOffsetLive = dAngle - dAnglePosSwitch;
-        dHoldAngle = getWristAngle();
+      if (!bPos && bPosOld) {
+        if (Math.abs(dAngle - dAnglePosSwitch) > 5.0) {
+          dOffsetLive = 0.0;
+          dOffsetLive = getWristAngle() - dAnglePosSwitch;
+          dHoldAngle = getWristAngle();
+        }
       }
+      bPosOld = bPos;
     }
-    bPosOld = bPos;
 
     SmartDashboard.putBoolean( "Positive", objPositiveSide.get());
     SmartDashboard.putBoolean( "Negative", objNegativeSide.get());
@@ -108,11 +131,13 @@ public class Wrist_subsystem extends SubsystemBase {
   
   public void moveWrist (double dSpeed) {
     double dSpeedLimit = Constants.Wrist.dSpeedControlMax;
-    double dCurrentAngle = getWristAngle();
-    if (dCurrentAngle > Constants.Wrist.dMaxAngleLimit || !objPositiveSide.get()) {
-      dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
+    // double dCurrentAngle = getWristAngle();
+    // if (dCurrentAngle > Constants.Wrist.dMaxAngleLimit || !objPositiveSide.get()) {
+    if (!objPositiveSide.get()) {
+        dSpeed = Utilities.limitVariable(-dSpeedLimit, dSpeed, 0.0);
     }
-    else if (dCurrentAngle < Constants.Wrist.dMinAngleLimit || !objNegativeSide.get()) {
+    // else if (dCurrentAngle < Constants.Wrist.dMinAngleLimit || !objNegativeSide.get()) {
+    else if (!objNegativeSide.get()) {
       dSpeed = Utilities.limitVariable(0.0, dSpeed, dSpeedLimit);
     }
     objWristMotor.set(dSpeed);

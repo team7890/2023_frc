@@ -66,12 +66,13 @@ public class ScoreCubeMiddle extends CommandBase {
 
   }
 
-  // PARTS OF THIS DO NOT WORK AND MUST BE FIXED
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     switch (iState) {
       case 10:          //if the forearm is out on the high scoring side first move the wirst up
+        objArm.softStop();
+        objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 4.0);
         if (objWrist.getWristAngle() < -10.0) iState = 11;
         break;
@@ -82,27 +83,23 @@ public class ScoreCubeMiddle extends CommandBase {
         dWristCommand_old = objWrist.moveWristToAngle(-45.0, dWristAngle_old, dWristCommand_old, 5.0);
         if (objForearm.getForearmAngle() < -20.0) iState = 12;
         break;
-      case 12:          // This moves the forearm to the correct position, but it doesn't work. If the forearm angle is between -20 and -50 it
-                        // will either do nothing OR move the arm & wrist but not forearm. Needs testing & patching
+      case 12:
         objArm.softStop();
         objForearm.softStop();
-        dWristCommand_old = objWrist.moveWristToAngle(dForearmTarget, dWristAngle_old, dWristCommand_old, 5.0);
-        if (objForearm.getForearmAngle() < -50.0) iState = 14;
-        else iState = 13;
+        dWristCommand_old = objWrist.moveWristToAngle(90.0, dWristAngle_old, dWristCommand_old, 5.0);
+        if (Math.abs(objWrist.getWristAngle() - 90.0) < 5.0) iState = 14;
         break;
-      case 13: // Added this case to try and fix the error of the forearm not adjusting properly, didn't work. Needs testing
-        objArm.softStop();
-        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 5.0);
-        dWristCommand_old = objWrist.moveWristToAngle(dForearmTarget, dWristAngle_old, dWristCommand_old, 4.0);
-        if (objForearm.getForearmAngle() < -50.0) iState = 14;
-        break;
-      case 14:          // Move everything to stow targets
+      case 14:          // Move arm and forearm to targets and move wrist slowly
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 6.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 3.0);
-        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 4.0);
-        // if all wrist joint is at correct angle then iState = 99;
-        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && Math.abs(objWrist.getWristAngle() - dWristTarget) < 1.0) iState = 99;
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 0.5);
+        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0) iState = 15;
         break;
+      case 15:
+        objArm.softStop();
+        objForearm.softStop();
+        dWristCommand_old = objWrist.moveWristToAngle(dWristTarget, dWristAngle_old, dWristCommand_old, 4.0);
+        if (Math.abs(objWrist.getWristAngle() - dWristTarget) < 2.0) iState = 99;
       case 99:
         objArm.softStop();
         objForearm.softStop();

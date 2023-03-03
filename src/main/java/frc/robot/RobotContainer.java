@@ -30,7 +30,9 @@ import frc.robot.autos.*;
 import frc.robot.command_groups.*;
 import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.AutoScoreConeTop;
+import frc.robot.commands.Autonomous.ScoreConeTopMoveLong;
 import frc.robot.commands.Autonomous.ScoreConeTopMoveShort;
+import frc.robot.commands.Autonomous.ScoreConeTopBalance;
 import frc.robot.commands.Button_commands.*;
 import frc.robot.subsystems.*;
 //End of Swerve Imports
@@ -83,10 +85,12 @@ public class RobotContainer {
   // private final JoystickButton robotCentric = new JoystickButton(m_DriverController, XboxController.Button.kLeftBumper.value);            //This is a change from team:364 code because we used CommandXboxController
 
   /* Subsystems */
-  private final Swerve_subsystem s_Swerve = new Swerve_subsystem();
+  private final Swerve_subsystem objSwerve_subsystem = new Swerve_subsystem();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private final SequentialCommandGroup m_simpleAuto = new AutoScoreConeTop(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem);
+  private final SequentialCommandGroup m_ScoreConeTopMoveShort = new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem);
+  private final SequentialCommandGroup m_ScoreConeTopMoveLong = new ScoreConeTopMoveLong(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem);
+  private final SequentialCommandGroup m_ScoreConeTopBalance = new ScoreConeTopBalance(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -103,14 +107,15 @@ public class RobotContainer {
     //   )
     // );
 
-    s_Swerve.setDefaultCommand(
-      new TeleopSwerve(
-        s_Swerve, 
+    objSwerve_subsystem.setDefaultCommand(
+      new Swerve_teleop(
+        objSwerve_subsystem, 
         () -> -m_DriverController.getLeftY(), 
         () -> -m_DriverController.getLeftX(),
         () -> -m_DriverController.getRightX(),
         // () -> m_DriverController.leftBumper().getAsBoolean()
-        () -> false     // Never using Robot Centric Mode
+        () -> false,     // Never using Robot Centric Mode
+        () -> m_DriverController.leftBumper().getAsBoolean()
       )
     );
 
@@ -119,7 +124,11 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    m_chooser.setDefaultOption("Simple Auto", m_simpleAuto);
+    m_chooser.setDefaultOption("ScoreConeTop MoveShort", m_ScoreConeTopMoveShort);
+    m_chooser.addOption("ScoreConeTop MoveLong", m_ScoreConeTopMoveLong);
+    m_chooser.addOption("ScoreConeTop Balance", m_ScoreConeTopBalance);
+
+
     // m_chooser.addOption("Complex Auto", m_complexAuto);
     Shuffleboard.getTab("Autonomous").add(m_chooser);
   }
@@ -170,14 +179,14 @@ public class RobotContainer {
     // ButtonSix.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
 
     // Right Side of Button box (Top to Bottom)    
-    ButtonOne.whileTrue(new ScoreConeTop2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem)); 
+    ButtonOne.whileTrue(new ScoreConeTop3(objArm_subsystem, objForearm_subsystem, objWrist_subsystem)); 
     ButtonTwo.whileTrue(new ScoreConeMiddle2(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
-    // ButtonThree.whileTrue(new PickupVeritcleCone(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonThree.whileTrue(new PickupVerticalCone(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
 
     
 
     // Middle buttons (Top and Bottom)    
-    ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
+    // ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
     
     // Currently Unused Buttons
@@ -187,7 +196,7 @@ public class RobotContainer {
 
 
     // Currently Working on this button
-    ButtonThree.whileTrue(new ScoreConeMiddleOld(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    // ButtonThree.whileTrue(new xScoreConeMiddleOld(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // 
 
 
@@ -202,13 +211,14 @@ public class RobotContainer {
 
     /* Driver Buttons */    //For Swerve
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
-    m_DriverController.back().onTrue(new InstantCommand(s_Swerve::zeroGyro, s_Swerve));                                  //Amalan How do we do this with CommandXboxController?
+    m_DriverController.back().onTrue(new InstantCommand(objSwerve_subsystem::zeroGyro, objSwerve_subsystem));                                  //Amalan How do we do this with CommandXboxController?
 
     // try with xbox controller but commented out when got button box above working
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
 
     // added to test autos with button because getAutoCmd was not working
-    m_DriverController.start().whileTrue(new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve));
+    m_DriverController.start().whileTrue(new ScoreConeTopBalance(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem));
+    // m_DriverController.leftBumper().whileTrue(new Swerve_balance(objSwerve_subsystem, .25, 0, 0, false));
   }
 
   /**
@@ -222,9 +232,9 @@ public class RobotContainer {
   
     // An ExampleCommand will run in autonomous
 
-    return new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve);
+    // return new ScoreConeTopMoveShort(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, s_Swerve);
 
-    // return m_chooser.getSelected();
+    return m_chooser.getSelected();
 
 
 

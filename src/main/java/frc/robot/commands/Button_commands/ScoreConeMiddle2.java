@@ -61,7 +61,8 @@ public class ScoreConeMiddle2 extends CommandBase {
 
     iState = 0;
     if (objForearm.getForearmAngle() > -20.0) iState = 10;
-    else iState = 22;
+    else if (objForearm.getForearmAngle() < -100.0) iState = 20;
+    else iState = 21;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,17 +87,22 @@ public class ScoreConeMiddle2 extends CommandBase {
       //   // if Arm and Forearm joints are at correct angle then iState = 14;
       //   if (objForearm.getForearmAngle() < -30.0) iState = 21;
       //   break;
+      case 20: 
+        objArm.softStop();
+        dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 4.0);
+        objWrist.softStop();
+        if (objForearm.getForearmAngle() >= -100.0) iState = 21;
       case 21:
         objArm.softStop();
         objForearm.softStop();
         dWristCommand_old = objWrist.moveWristToAngle(-100.0, dWristAngle_old, dWristCommand_old, 4.0);
-        if (objWrist.getWristAngle() < -90.0) iState = 22;
+        if (objWrist.getWristAngle() < -95.0) iState = 22;
         break;
       case 22:
         dArmCommand_old = objArm.moveArmToAngle(dArmTarget, dArmAngle_old, dArmCommand_old, 5.0);
         dForearmCommand_old = objForearm.moveForearmToAngle(dForearmTarget, dForearmAngle_old, dForearmCommand_old, 4.0);
         dWristCommand_old = objWrist.moveWristToAngle(45.0, dWristAngle_old, dWristCommand_old, 5.0);
-        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 ) iState = 33;
+        if (Math.abs(objForearm.getForearmAngle() - dForearmTarget) < 1.0 && Math.abs(objArm.getArmAngle() - dArmTarget) < 1.0 && objWrist.getWristAngle() > 40.0) iState = 33;
         break;
       case 33:
         objArm.softStop();

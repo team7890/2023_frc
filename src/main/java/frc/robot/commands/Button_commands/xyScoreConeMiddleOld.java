@@ -10,7 +10,7 @@ import frc.robot.subsystems.Wrist_subsystem;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 
-public class ScoreConeMiddleOld extends CommandBase {
+public class xyScoreConeMiddleOld extends CommandBase {
 
   private final Wrist_subsystem objWrist;
   private final Forearm_subsystem objForearm;
@@ -34,7 +34,7 @@ public class ScoreConeMiddleOld extends CommandBase {
   double dWristTarget = -9.4;
 
   /** Creates a new ScoreCubeTop. */
-  public ScoreConeMiddleOld(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
+  public xyScoreConeMiddleOld(Arm_subsystem objArm_in, Forearm_subsystem objForearm_in, Wrist_subsystem objWrist_in) {
     objArm = objArm_in;
     objForearm = objForearm_in;
     objWrist = objWrist_in;
