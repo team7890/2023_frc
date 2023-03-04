@@ -58,7 +58,7 @@ public class Swerve_balance extends CommandBase {
     //   dTrans = dTrans_remember * 0.5;
     // }
     if(bOnRamp) {
-      dTrans = s_Swerve.getRoll() * dKp;
+      dTrans = s_Swerve.getRoll() * dKp * 0.75;
       if(Math.abs(dTrans) < 0.03) dTrans = 0.0;
     }
     
