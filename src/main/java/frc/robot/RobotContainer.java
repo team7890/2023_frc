@@ -161,7 +161,7 @@ public class RobotContainer {
     m_CoPilotController.b().whileTrue(new Wrist_command(objWrist_subsystem, Constants.Wrist.dSpeedManual, false, 0.0));
     // m_CoPilotController.rightTrigger().whileTrue(new Wrist_command(objWrist_subsystem, -Constants.Wrist.dWristSpeedManual, true, 0.0));       //Also has the negative -
 
-    
+    // m_CoPilotController.rightBumper().whileTrue(new STEAL(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     
     
     
@@ -186,6 +186,8 @@ public class RobotContainer {
     
 
     // Middle buttons (Top and Bottom)    
+    ButtonSeven.whileTrue(new DoubleSubstationPickup(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
+    ButtonEight.whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // ButtonSeven.whileTrue(new Mech_command(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, 0.0, 0.0, 0.0));
     // ButtonEight.debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
     
@@ -217,7 +219,7 @@ public class RobotContainer {
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());
 
     // added to test autos with button because getAutoCmd was not working
-    m_DriverController.start().whileTrue(new ScoreConeTopBalance(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem));
+    // m_DriverController.start().whileTrue(new ScoreConeTopBalance(objArm_subsystem, objForearm_subsystem, objWrist_subsystem, objGrabber_subsystem, objSwerve_subsystem));
     // m_DriverController.leftBumper().whileTrue(new Swerve_balance(objSwerve_subsystem, .25, 0, 0, false));
   }
 

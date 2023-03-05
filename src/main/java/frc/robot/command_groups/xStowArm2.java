@@ -19,29 +19,26 @@ import frc.robot.commands.Wrist_command;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TopCubePosition extends SequentialCommandGroup {
+public class xStowArm2 extends SequentialCommandGroup {
 
   // Target Positions
-  double dArmTarget = 9.9;
-  double dForearmTarget = 62.1;
-  double dWristTarget = 8.5;
-  //Raw Wrist = 1.4
+  double dArmTarget = 2.0;
+  double dForearmTarget = -140.0;
+  double dWristTarget = 105.0;
 
   /** Creates a new Mech_cmd_group. */
-  public TopCubePosition(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
+  public xStowArm2(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
+        new Wrist_command(obj_Wrist, Constants.Wrist.dSpeedManual, true, dWristTarget),
         new Arm_command(obj_Arm, Constants.Arm.dArmSpeedManual, true, dArmTarget).withTimeout(5.0),
-        new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget),
         new SequentialCommandGroup(
-          new WaitCommand(4),
-          new Wrist_command(obj_Wrist, Constants.Wrist.dSpeedManual, true, dWristTarget)
+          new WaitCommand(0.5),
+          new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget)
         )
-      ),
-      new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget)
-
+      )
     );
   }
 }

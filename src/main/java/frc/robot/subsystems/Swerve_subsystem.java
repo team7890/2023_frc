@@ -127,6 +127,11 @@ public class Swerve_subsystem extends SubsystemBase {
         return dRoll;
     }
 
+    public double getYawDouble() {
+        double dYaw = gyro.getYaw();
+        return dYaw;
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions()); 
@@ -136,5 +141,6 @@ public class Swerve_subsystem extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
         }
         SmartDashboard.putNumber("Roll: ", getRoll());
+        SmartDashboard.putNumber("Yaw", getYawDouble());
     }
 }

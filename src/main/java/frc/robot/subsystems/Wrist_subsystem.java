@@ -57,25 +57,27 @@ public class Wrist_subsystem extends SubsystemBase {
 
     bInitLimitSwitch = false;
     // init in case start with one or the other limit switches engaged
-    if (!objNegativeSide.get()) {
-      if (Math.abs(getWristAngle() - dAngleNegSwitch) > 5.0) {
-        dOffsetLive = dAngleNegSwitch - getWristAngle();
-        bInitLimitSwitch = true;
-      }
-    }
+    // if (!objNegativeSide.get()) {
+    //   if (Math.abs(getWristAngle() - dAngleNegSwitch) > 5.0) {
+    //     dOffsetLive = -dAngleNegSwitch - Constants.Wrist.dOffset - (objAbsEncoder.get() * Constants.Wrist.dDegreesPerRev);
+    //     bInitLimitSwitch = true;
+    //   }
+    // }
 
-    if (!objPositiveSide.get()) {
+    // if (!objPositiveSide.get()) {
+    // always do this at initialization, which requires wrist to be at or VERY near the limit switch when the robot powers on
+
       if (Math.abs(getWristAngle() - dAnglePosSwitch) > 5.0) {
-        dOffsetLive = getWristAngle() - dAnglePosSwitch;
+        dOffsetLive = -dAnglePosSwitch - Constants.Wrist.dOffset - (objAbsEncoder.get() * Constants.Wrist.dDegreesPerRev);
         bInitLimitSwitch = true;
       }
-    }
+    // }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    getWristAngle();
+    // getWristAngle();
     dAngle = getWristAngle();
     bPos = !objPositiveSide.get();
     bNeg = !objNegativeSide.get();
@@ -100,23 +102,38 @@ public class Wrist_subsystem extends SubsystemBase {
       bInitLimitSwitch = false;
     }
     else {    // every other time the limit switch turns off, recalibrate the angle
-      if (!bNeg && bNegOld) {
+      // if (!bNeg && bNegOld) {
+      //   if (Math.abs(dAngle - dAngleNegSwitch) > 5.0) {
+      //     dOffsetLive = 0.0;
+      //     dOffsetLive = dAngleNegSwitch - getWristAngle();
+      //     dHoldAngle = getWristAngle();
+      //   }
+      // }
+      // bNegOld = bNeg;
+      if (bNeg) {
         if (Math.abs(dAngle - dAngleNegSwitch) > 5.0) {
           dOffsetLive = 0.0;
-          dOffsetLive = dAngleNegSwitch - getWristAngle();
+          dOffsetLive = -dAngleNegSwitch - Constants.Wrist.dOffset - (objAbsEncoder.get() * Constants.Wrist.dDegreesPerRev);
           dHoldAngle = getWristAngle();
         }
       }
-      bNegOld = bNeg;
+      // bNegOld = bNeg;
 
-      if (!bPos && bPosOld) {
+      // if (!bPos && bPosOld) {
+      //   if (Math.abs(dAngle - dAnglePosSwitch) > 5.0) {
+      //     dOffsetLive = 0.0;
+      //     dOffsetLive = getWristAngle() - dAnglePosSwitch;
+      //     dHoldAngle = getWristAngle();
+      //   }
+      // }
+      if (bPos) {
         if (Math.abs(dAngle - dAnglePosSwitch) > 5.0) {
-          dOffsetLive = 0.0;
-          dOffsetLive = getWristAngle() - dAnglePosSwitch;
+          // dOffsetLive = 0.0;
+          dOffsetLive = -dAnglePosSwitch - Constants.Wrist.dOffset - (objAbsEncoder.get() * Constants.Wrist.dDegreesPerRev);
           dHoldAngle = getWristAngle();
         }
       }
-      bPosOld = bPos;
+      // bPosOld = bPos;
     }
 
     SmartDashboard.putBoolean( "Positive", objPositiveSide.get());

@@ -19,16 +19,16 @@ import frc.robot.commands.Wrist_command;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Pickup extends SequentialCommandGroup {
+public class xTopCubePosition extends SequentialCommandGroup {
 
   // Target Positions
-  double dArmTarget = -12.9;
-  double dForearmTarget = -118.7;
-  double dWristTarget = -49.4;
+  double dArmTarget = 9.9;
+  double dForearmTarget = 62.1;
+  double dWristTarget = 8.5;
   //Raw Wrist = 1.4
 
   /** Creates a new Mech_cmd_group. */
-  public Pickup(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
+  public xTopCubePosition(Arm_subsystem obj_Arm, Forearm_subsystem obj_Forearm, Wrist_subsystem obj_Wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -36,7 +36,7 @@ public class Pickup extends SequentialCommandGroup {
         new Arm_command(obj_Arm, Constants.Arm.dArmSpeedManual, true, dArmTarget).withTimeout(5.0),
         new Forearm_command(obj_Forearm, Constants.Forearm.dSpeedManual, true, dForearmTarget),
         new SequentialCommandGroup(
-          new WaitCommand(0.25),
+          new WaitCommand(4),
           new Wrist_command(obj_Wrist, Constants.Wrist.dSpeedManual, true, dWristTarget)
         )
       ),

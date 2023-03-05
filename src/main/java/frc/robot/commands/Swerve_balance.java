@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve_subsystem;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve_balance extends CommandBase {
   private Swerve_subsystem s_Swerve;
@@ -20,6 +21,7 @@ public class Swerve_balance extends CommandBase {
   private double dKp;
   private boolean bRobotCentric;
   private boolean bOnRamp;
+  private double dYaw;
 
   /** Creates a new AutoSwerve. */
   public Swerve_balance(Swerve_subsystem s_Swerve_in, double dTrans_in, double dStrafe_in, double dRotate_in, boolean bRobotCentric_in) {
@@ -42,6 +44,7 @@ public class Swerve_balance extends CommandBase {
     dRotate = 0.0;
     bOnRamp = false;
     dKp = 0.4 / 24.0; // @max roll is 24, and max speed we want to go is 0.4
+    dYaw = s_Swerve.getYawDouble();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,9 +61,11 @@ public class Swerve_balance extends CommandBase {
     //   dTrans = dTrans_remember * 0.5;
     // }
     if(bOnRamp) {
-      dTrans = s_Swerve.getRoll() * dKp * 0.75;
+      dTrans = s_Swerve.getRoll() * dKp * 0.6; // when possible, change to .6
       if(Math.abs(dTrans) < 0.03) dTrans = 0.0;
     }
+    
+    if(Math.abs(s_Swerve.getYawDouble() - dYaw) > 15.0) dTrans = 0.0;
     
     /* Drive */
     s_Swerve.drive(
