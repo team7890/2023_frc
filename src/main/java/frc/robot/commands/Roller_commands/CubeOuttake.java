@@ -2,48 +2,46 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.Roller_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-//Our imports
-import frc.robot.subsystems.Grabber_subsystem;
+import frc.robot.subsystems.RollerHand_subsystem;
 
+public class CubeOuttake extends CommandBase {
 
-public class Grabber_command extends CommandBase {
+  private final RollerHand_subsystem objRollerHand;
+  private final boolean bDirection;
 
-  private final Grabber_subsystem objGrabber_subsystem;
-  private boolean bDone;
-
-  /** Creates a new Grabber. */
-  public Grabber_command(Grabber_subsystem objGrabber_subsystem_in) {
-    
-    objGrabber_subsystem = objGrabber_subsystem_in;
+  /** Creates a new ConeOuttake. */
+  public CubeOuttake(RollerHand_subsystem objRollerHand_in, boolean bDirection_in) {
+    objRollerHand = objRollerHand_in;
+    bDirection = bDirection_in;
     // Use addRequirements() here to declare subsystem dependencies.
-
-    addRequirements(objGrabber_subsystem);
+    addRequirements(objRollerHand);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    objGrabber_subsystem.toggleGrabber();
-    bDone = false;
+    objRollerHand.stopMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    bDone = true;
+    objRollerHand.outtakeCube(bDirection);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    objRollerHand.stopMotors();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return bDone;
+    return false;
   }
 }

@@ -11,13 +11,13 @@ import frc.robot.commands.Button_commands.xScoreConeTop2;
 import frc.robot.subsystems.Arm_subsystem;
 import frc.robot.subsystems.Forearm_subsystem;
 import frc.robot.subsystems.Wrist_subsystem;
-import frc.robot.commands.Grabber_command;
+import frc.robot.commands.xGrabber_command;
 
 import frc.robot.commands.Arm_command;
 import frc.robot.commands.Forearm_command;
 import frc.robot.commands.Wrist_command;
 
-import frc.robot.subsystems.Grabber_subsystem;
+import frc.robot.subsystems.xGrabber_subsystem;
 
 
 
@@ -26,12 +26,12 @@ import frc.robot.subsystems.Grabber_subsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoScoreConeTop extends SequentialCommandGroup {
   /** Creates a new AutoScoreConeTop. */
-  public AutoScoreConeTop(Arm_subsystem objArm, Forearm_subsystem objForearm, Wrist_subsystem objWrist, Grabber_subsystem objGrabber) {
+  public AutoScoreConeTop(Arm_subsystem objArm, Forearm_subsystem objForearm, Wrist_subsystem objWrist, xGrabber_subsystem objGrabber) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new xScoreConeTop2(objArm, objForearm, objWrist).withTimeout(3.0),
-      new Grabber_command(objGrabber)
+      new xGrabber_command(objGrabber)
     );
 
 

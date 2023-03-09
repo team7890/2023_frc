@@ -34,6 +34,10 @@ import frc.robot.commands.Autonomous.ScoreConeTopMoveLong;
 import frc.robot.commands.Autonomous.ScoreConeTopMoveShort;
 import frc.robot.commands.Autonomous.ScoreConeTopBalance;
 import frc.robot.commands.Button_commands.*;
+import frc.robot.commands.Roller_commands.ConeIntake;
+import frc.robot.commands.Roller_commands.ConeOuttake;
+import frc.robot.commands.Roller_commands.CubeIntake;
+import frc.robot.commands.Roller_commands.CubeOuttake;
 import frc.robot.subsystems.*;
 //End of Swerve Imports
 
@@ -53,7 +57,9 @@ public class RobotContainer {
   private final Forearm_subsystem objForearm_subsystem = new Forearm_subsystem();
   private final Wrist_subsystem objWrist_subsystem = new Wrist_subsystem();
   // private final SignalLights_subsystem objSignalLights_subsystem = new SignalLights_subsystem();
-  private final Grabber_subsystem objGrabber_subsystem = new Grabber_subsystem();
+  private final xGrabber_subsystem objGrabber_subsystem = new xGrabber_subsystem();
+
+  private final RollerHand_subsystem objRollerHand = new RollerHand_subsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_CoPilotController = new CommandXboxController(Constants.Controllers.iCoPilot);
@@ -206,7 +212,7 @@ public class RobotContainer {
 
 
     // Open/ Close grabber
-    m_DriverController.a().debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
+    // m_DriverController.a().debounce(0.05).onTrue(new Grabber_command(objGrabber_subsystem));
     m_DriverController.rightBumper().whileTrue(new StowArm(objArm_subsystem, objForearm_subsystem, objWrist_subsystem));
     // leftbumper will be slow mode
 
@@ -214,6 +220,14 @@ public class RobotContainer {
     /* Driver Buttons */    //For Swerve
     // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));            //This is a change from team:364 code because we used CommandXboxController
     m_DriverController.back().onTrue(new InstantCommand(objSwerve_subsystem::zeroGyro, objSwerve_subsystem));                                  //Amalan How do we do this with CommandXboxController?
+
+
+    m_DriverController.leftTrigger().whileTrue(new ConeIntake(objRollerHand));
+    m_DriverController.rightTrigger().whileTrue(new ConeOuttake(objRollerHand));
+    m_DriverController.a().whileTrue(new CubeIntake(objRollerHand));
+    m_DriverController.x().whileTrue(new CubeOuttake(objRollerHand, false));
+    m_DriverController.b().whileTrue(new CubeOuttake(objRollerHand, true));
+
 
     // try with xbox controller but commented out when got button box above working
     // m_DriverController.a().onTrue(objSignalLights_subsystem.changeLightColor());

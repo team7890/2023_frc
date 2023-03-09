@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 
-public class Grabber_subsystem extends SubsystemBase {
+public class xGrabber_subsystem extends SubsystemBase {
   /** Creates a new Grabber. */
   
   private Compressor objCompressor;
   private Solenoid objSolenoid;
   private boolean bState;
 
-  public Grabber_subsystem() {
+  public xGrabber_subsystem() {
     Compressor objCompressor = new Compressor(2, PneumaticsModuleType.CTREPCM);
     objCompressor.enableDigital();;
     // objSolenoid = new Solenoid(ModuleType.kRev, 2);
